@@ -2,17 +2,26 @@ package cl.nelsonmc.indicadores;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.gson.Gson;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import cl.nelsonmc.indicadores.di.BaseApplication;
 import cl.nelsonmc.indicadores.modelos.DataIndicador;
@@ -24,8 +33,6 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Inject
-    WebClient client;
     private TextView fechaDolarText,valorDolarText;
     private TextView fechaEuroTextView,valorEuroText;
     private TextView fechaUFTextView,valorUFText;
@@ -36,25 +43,176 @@ public class MainActivity extends AppCompatActivity {
     private TextView fechaCobreTextView,valorCobreText;
     private TextView fechaDesempleoText,valorDesempleoText;
     private TextView fechaBitcoinText,valorBitcoinText;
-    private ImageView trendingDolar, trendingEuro,trendingUF,
-            trendingIVP,trendingIPC,trendingUTM,trendingIMACEC
-            ,trendingCobre,trendingDesempleo,trendingBitcoin;
+    private ImageView trendingDolar, trendingEuro,trendingUF;
+    private ImageView trendingIVP,trendingIPC,trendingUTM,trendingIMACEC;
+    private ImageView trendingCobre,trendingDesempleo,trendingBitcoin;
+    private MainActivityModelView viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpDagger();
+
         setUpView();
-        requestDolarData();
-        requestEuro();
-        requestUF();
-        requestIVP();
-        requestIPC();
-        requestUTM();
-        requestIMACEC();
-        requestCobre();
-        requestDesempleo();
-        requestBitcoin();
+
+        viewModel = new ViewModelProvider(this).get(MainActivityModelView.class);
+        viewModel.getDolarListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                if(serieIndicador != null) {
+                    fechaDolarText.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorDolarText.setText(serieIndicador.get(0).getValor());
+                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                    if (valorHoy < valorAyer) {
+                        trendingDolar.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    }
+                }
+            }
+        });
+        viewModel.requestDolarData();
+
+        viewModel.getEuroListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                if(serieIndicador != null) {
+                fechaEuroTextView.setText(DateUtcToString( serieIndicador.get(0).getFecha() ));
+                valorEuroText.setText(serieIndicador.get(0).getValor() );
+                float valorHoy  = Float.parseFloat(serieIndicador.get(0).getValor());
+                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                if(valorHoy < valorAyer){
+                    trendingEuro.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                }
+                }
+            }
+        });
+        viewModel.requestEuroData();
+
+        viewModel.getUFListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                if(serieIndicador != null) {
+                    fechaUFTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorUFText.setText(decimalFormat(serieIndicador.get(0).getValor()));
+                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                    if (valorHoy < valorAyer) {
+                        trendingUF.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    }
+                }
+            }
+        });
+       viewModel.requestUFData();
+
+       viewModel.getIVPListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+           @Override
+           public void onChanged(List<SerieIndicador> serieIndicador) {
+               if(serieIndicador != null) {
+                   fechaIVPTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                   valorIVPText.setText(decimalFormat(serieIndicador.get(0).getValor()));
+                   float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                   float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                   if (valorHoy < valorAyer) {
+                       trendingIVP.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                   }
+               }
+           }
+       });
+        viewModel.requestIVPData();
+
+        viewModel.getIPCListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                if(serieIndicador != null) {
+                    fechaIPCTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorIPCText.setText(serieIndicador.get(0).getValor());
+                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                    if (valorHoy < valorAyer) {
+                        trendingIPC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    }
+                }
+            }
+        });
+        viewModel.requestIPCData();
+
+        viewModel.getUTMListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                if(serieIndicador != null) {
+                    fechaUTMTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorUTMText.setText(decimalFormat(serieIndicador.get(0).getValor()));
+                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                    if (valorHoy < valorAyer) {
+                        trendingUTM.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    }
+                }
+            }
+        });
+        viewModel.requestUTMData();
+
+        viewModel.getIMACECListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                if(serieIndicador != null) {
+                    fechaIMACECTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorIMACECText.setText(serieIndicador.get(0).getValor());
+                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                    if (valorHoy < valorAyer) {
+                        trendingIMACEC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    }
+                }
+            }
+        });
+        viewModel.requestIMACECData();
+
+        viewModel.getCobreListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                if(serieIndicador != null) {
+                    fechaCobreTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorCobreText.setText(serieIndicador.get(0).getValor());
+                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                    if (valorHoy < valorAyer) {
+                        trendingCobre.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    }
+                }
+            }
+        });
+        viewModel.requestCobreData();
+
+        viewModel.getDesempleoListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                if(serieIndicador != null) {
+                    fechaDesempleoText.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorDesempleoText.setText(serieIndicador.get(0).getValor());
+                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                    if (valorHoy < valorAyer) {
+                        trendingDesempleo.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    }
+                }
+            }
+        });
+        viewModel.requestDesempleoData();
+
+        viewModel.getBitcoinListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+            @Override
+            public void onChanged(List<SerieIndicador> serieIndicador) {
+                fechaBitcoinText.setText(DateUtcToString( serieIndicador.get(0).getFecha() ));
+                valorBitcoinText.setText(decimalFormat(serieIndicador.get(0).getValor()) );
+                float valorHoy  = Float.parseFloat(serieIndicador.get(0).getValor());
+                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                if(valorHoy < valorAyer){
+                    trendingBitcoin.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                }
+            }
+        });
+        viewModel.requestBitcoinData();
     }
     
     private void setUpView(){
@@ -90,258 +248,9 @@ public class MainActivity extends AppCompatActivity {
         trendingBitcoin     = findViewById(R.id.trendingBitcoin);
     }
 
-    private void setUpDagger(){
-        ((BaseApplication)getApplication()).getRetrofitComponent().inject(this);
-    }
-
-    private void requestDolarData(){
-        Call<DataIndicador> call = client.getDataDolar();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayDolar = response.body().getSerie();
-                    fechaDolarText.setText(DateUtcToString( arrayDolar.get(0).getFecha() ));
-                    valorDolarText.setText(arrayDolar.get(0).getValor() );
-                    float valorHoy  = Float.parseFloat(arrayDolar.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayDolar.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingDolar.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestEuro(){
-        Call<DataIndicador> call = client.getDataEuro();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayEuro = response.body().getSerie();
-                    fechaEuroTextView.setText(DateUtcToString( arrayEuro.get(0).getFecha() ));
-                    valorEuroText.setText(arrayEuro.get(0).getValor() );
-                    float valorHoy  = Float.parseFloat(arrayEuro.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayEuro.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingEuro.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestUF(){
-        Call<DataIndicador> call = client.getDataUF();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayUF = response.body().getSerie();
-                    fechaUFTextView.setText(DateUtcToString( arrayUF.get(0).getFecha() ));
-                    valorUFText.setText(decimalFormat (arrayUF.get(0).getValor()) );
-                    float valorHoy  = Float.parseFloat(arrayUF.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayUF.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingUF.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestIVP(){
-        Call<DataIndicador> call = client.getDataIVP();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayIVP = response.body().getSerie();
-                    fechaIVPTextView.setText(DateUtcToString( arrayIVP.get(0).getFecha() ));
-                    valorIVPText.setText(decimalFormat (arrayIVP.get(0).getValor()) );
-                    float valorHoy  = Float.parseFloat(arrayIVP.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayIVP.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingIVP.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestIPC() {
-        Call<DataIndicador> call = client.getDataIPC();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayIPC = response.body().getSerie();
-                    fechaIPCTextView.setText(DateUtcToString( arrayIPC.get(0).getFecha() ));
-                    valorIPCText.setText(arrayIPC.get(0).getValor() );
-                    float valorHoy  = Float.parseFloat(arrayIPC.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayIPC.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingIPC.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestUTM() {
-        Call<DataIndicador> call = client.getDataUTM();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayUTM = response.body().getSerie();
-                    fechaUTMTextView.setText(DateUtcToString( arrayUTM.get(0).getFecha() ));
-                    valorUTMText.setText(decimalFormat(arrayUTM.get(0).getValor()));
-                    float valorHoy  = Float.parseFloat(arrayUTM.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayUTM.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingUTM.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestIMACEC() {
-        Call<DataIndicador> call = client.getDataIMACEC();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayIMACEC = response.body().getSerie();
-                    fechaIMACECTextView.setText(DateUtcToString( arrayIMACEC.get(0).getFecha() ));
-                    valorIMACECText.setText(arrayIMACEC.get(0).getValor() );
-                    float valorHoy  = Float.parseFloat(arrayIMACEC.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayIMACEC.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingIMACEC.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestCobre() {
-        Call<DataIndicador> call = client.getDataLibraCobre();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayCobre = response.body().getSerie();
-                    fechaCobreTextView.setText(DateUtcToString( arrayCobre.get(0).getFecha() ));
-                    valorCobreText.setText(arrayCobre.get(0).getValor() );
-                    float valorHoy  = Float.parseFloat(arrayCobre.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayCobre.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingCobre.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestDesempleo() {
-        Call<DataIndicador> call = client.getDataDesempleo();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayDesempleo = response.body().getSerie();
-                    fechaDesempleoText.setText(DateUtcToString( arrayDesempleo.get(0).getFecha() ));
-                    valorDesempleoText.setText(arrayDesempleo.get(0).getValor() );
-                    float valorHoy  = Float.parseFloat(arrayDesempleo.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayDesempleo.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingDesempleo.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
-    }
-
-    private void requestBitcoin() {
-        Call<DataIndicador> call = client.getDataBitcoin();
-        call.enqueue(new Callback<DataIndicador>() {
-            @Override
-            public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
-
-                    ArrayList<SerieIndicador> arrayBitcoin = response.body().getSerie();
-                    fechaBitcoinText.setText(DateUtcToString( arrayBitcoin.get(0).getFecha() ));
-                    valorBitcoinText.setText(decimalFormat(arrayBitcoin.get(0).getValor()) );
-                    float valorHoy  = Float.parseFloat(arrayBitcoin.get(0).getValor());
-                    float valorAyer = Float.parseFloat(arrayBitcoin.get(1).getValor());
-                    if(valorHoy < valorAyer){
-                        trendingBitcoin.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<DataIndicador> call, Throwable t) {
-                Log.e("onFailure", t.getMessage());
-            }
-        });
+    public void goToIndicador(View view){
+        Intent intent = new Intent(MainActivity.this,IndicadorActivity.class);
+        startActivity(intent);
     }
 
     private String decimalFormat(String valor){
