@@ -1,10 +1,13 @@
 package cl.nelsonmc.indicadores;
 
 import android.app.Application;
+
+import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import com.google.gson.Gson;
 import java.util.List;
 import javax.inject.Inject;
 import cl.nelsonmc.indicadores.di.BaseApplication;
@@ -14,6 +17,8 @@ import cl.nelsonmc.indicadores.webServices.WebClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MainActivityModelView extends AndroidViewModel {
     @Inject
@@ -52,6 +57,15 @@ public class MainActivityModelView extends AndroidViewModel {
     public MutableLiveData<List<SerieIndicador>> getDesempleoListObserver() { return desempleoList; }
     public MutableLiveData<List<SerieIndicador>> getBitcoinListObserver() { return bitcoinList; }
 
+    private void saveData(String tipoData,List<SerieIndicador> dataList){
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(dataList);
+        editor.putString(tipoData, json);
+        editor.apply();
+    }
+
     public void requestDolarData() {
         Call<DataIndicador> call = client.getDataDolar();
         call.enqueue(new Callback<DataIndicador>() {
@@ -59,6 +73,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     dolarList.postValue(response.body().getSerie());
+                    saveData("dolar",response.body().getSerie());
                 }
             }
 
@@ -77,6 +92,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     euroList.postValue(response.body().getSerie());
+                    saveData("euro",response.body().getSerie());
                 }
             }
 
@@ -95,6 +111,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     ufList.postValue(response.body().getSerie());
+                    saveData("uf",response.body().getSerie());
                 }
             }
 
@@ -113,6 +130,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     ivpList.postValue(response.body().getSerie());
+                    saveData("ivp",response.body().getSerie());
                 }
             }
 
@@ -131,6 +149,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     ipcList.postValue(response.body().getSerie());
+                    saveData("ipc",response.body().getSerie());
                 }
             }
 
@@ -149,6 +168,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     utmList.postValue(response.body().getSerie());
+                    saveData("utm",response.body().getSerie());
                 }
             }
 
@@ -167,6 +187,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     imacecList.postValue(response.body().getSerie());
+                    saveData("imacec",response.body().getSerie());
                 }
             }
 
@@ -185,6 +206,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     cobreList.postValue(response.body().getSerie());
+                    saveData("cobre",response.body().getSerie());
                 }
             }
 
@@ -203,6 +225,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     desempleoList.postValue(response.body().getSerie());
+                    saveData("desempleo",response.body().getSerie());
                 }
             }
 
@@ -221,6 +244,7 @@ public class MainActivityModelView extends AndroidViewModel {
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
                 if (response!=null && response.isSuccessful() && response.body()!=null){
                     bitcoinList.postValue(response.body().getSerie());
+                    saveData("bitcoin",response.body().getSerie());
                 }
             }
 

@@ -1,7 +1,7 @@
 package cl.nelsonmc.indicadores.di;
 
 import javax.inject.Singleton;
-import cl.nelsonmc.indicadores.MainActivity;
+
 import cl.nelsonmc.indicadores.MainActivityModelView;
 import dagger.Component;
 

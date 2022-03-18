@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,15 +19,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
-import cl.nelsonmc.indicadores.di.BaseApplication;
-import cl.nelsonmc.indicadores.modelos.DataIndicador;
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
-import cl.nelsonmc.indicadores.webServices.WebClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -102,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-       viewModel.requestUFData();
+        viewModel.requestUFData();
 
-       viewModel.getIVPListObserver().observe(this, new Observer<List<SerieIndicador>>() {
+        viewModel.getIVPListObserver().observe(this, new Observer<List<SerieIndicador>>() {
            @Override
            public void onChanged(List<SerieIndicador> serieIndicador) {
                if(serieIndicador != null) {
@@ -203,12 +193,14 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getBitcoinListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
-                fechaBitcoinText.setText(DateUtcToString( serieIndicador.get(0).getFecha() ));
-                valorBitcoinText.setText(decimalFormat(serieIndicador.get(0).getValor()) );
-                float valorHoy  = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if(valorHoy < valorAyer){
-                    trendingBitcoin.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                if(serieIndicador != null) {
+                    fechaBitcoinText.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorBitcoinText.setText(decimalFormat(serieIndicador.get(0).getValor()));
+                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
+                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
+                    if (valorHoy < valorAyer) {
+                        trendingBitcoin.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    }
                 }
             }
         });
@@ -249,7 +241,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToIndicador(View view){
+        Log.d("goToIndicador", (String) view.getTag());
         Intent intent = new Intent(MainActivity.this,IndicadorActivity.class);
+        intent.putExtra("tipoData",(String) view.getTag());
         startActivity(intent);
     }
 

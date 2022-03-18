@@ -19,6 +19,7 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
+                android:tag="dolar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:onClick="goToIndicador"
@@ -91,8 +92,10 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:tag="euro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="goToIndicador"
                 app:cardCornerRadius="5dp"
                 app:cardBackgroundColor="@color/colorCardBackground"
                 style="@style/MarginCardView">
@@ -162,9 +165,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:tag="uf"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
+                android:onClick="goToIndicador"
                 app:cardBackgroundColor="@color/colorCardBackground"
                 style="@style/MarginCardView">
 
@@ -231,10 +236,13 @@
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
+                android:tag="ivp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
+                android:onClick="goToIndicador"
                 app:cardBackgroundColor="@color/colorCardBackground"
                 style="@style/MarginCardView">
 
@@ -303,9 +311,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:tag="ipc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
+                android:onClick="goToIndicador"
                 app:cardBackgroundColor="@color/colorCardBackground"
                 style="@style/MarginCardView">
 
@@ -374,9 +384,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:tag="utm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
+                android:onClick="goToIndicador"
                 app:cardBackgroundColor="@color/colorCardBackground"
                 style="@style/MarginCardView">
 
@@ -445,9 +457,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:tag="imacec"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
+                android:onClick="goToIndicador"
                 app:cardBackgroundColor="@color/colorCardBackground"
                 style="@style/MarginCardView">
 
@@ -516,9 +530,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+            android:tag="cobre"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardCornerRadius="5dp"
+            android:onClick="goToIndicador"
             app:cardBackgroundColor="@color/colorCardBackground"
             style="@style/MarginCardView">
 
@@ -587,9 +603,11 @@
         </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:tag="desempleo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
+                android:onClick="goToIndicador"
                 app:cardBackgroundColor="@color/colorCardBackground"
                 style="@style/MarginCardView">
 
@@ -658,9 +676,11 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:tag="bitcoin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
+                android:onClick="goToIndicador"
                 app:cardBackgroundColor="@color/colorCardBackground"
                 style="@style/MarginCardView">
 
