@@ -5,19 +5,11 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.gson.Gson;
-import org.threeten.bp.Instant;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
+
 import java.util.List;
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 
@@ -50,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                    fechaDolarText.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    fechaDolarText.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
                     valorDolarText.setText(serieIndicador.get(0).getValor());
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
@@ -66,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                fechaEuroTextView.setText(DateUtcToString( serieIndicador.get(0).getFecha() ));
+                fechaEuroTextView.setText(viewModel.dateUtcToString( serieIndicador.get(0).getFecha() ));
                 valorEuroText.setText(serieIndicador.get(0).getValor() );
                 float valorHoy  = Float.parseFloat(serieIndicador.get(0).getValor());
                 float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
@@ -82,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                    fechaUFTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
-                    valorUFText.setText(decimalFormat(serieIndicador.get(0).getValor()));
+                    fechaUFTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorUFText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
@@ -98,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
            @Override
            public void onChanged(List<SerieIndicador> serieIndicador) {
                if(serieIndicador != null) {
-                   fechaIVPTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
-                   valorIVPText.setText(decimalFormat(serieIndicador.get(0).getValor()));
+                   fechaIVPTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                   valorIVPText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                    if (valorHoy < valorAyer) {
@@ -114,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                    fechaIPCTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    fechaIPCTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
                     valorIPCText.setText(serieIndicador.get(0).getValor());
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
@@ -130,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                    fechaUTMTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
-                    valorUTMText.setText(decimalFormat(serieIndicador.get(0).getValor()));
+                    fechaUTMTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorUTMText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
@@ -146,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                    fechaIMACECTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    fechaIMACECTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
                     valorIMACECText.setText(serieIndicador.get(0).getValor());
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
@@ -162,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                    fechaCobreTextView.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    fechaCobreTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
                     valorCobreText.setText(serieIndicador.get(0).getValor());
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
@@ -178,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                    fechaDesempleoText.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
+                    fechaDesempleoText.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
                     valorDesempleoText.setText(serieIndicador.get(0).getValor());
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
@@ -194,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
-                    fechaBitcoinText.setText(DateUtcToString(serieIndicador.get(0).getFecha()));
-                    valorBitcoinText.setText(decimalFormat(serieIndicador.get(0).getValor()));
+                    fechaBitcoinText.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                    valorBitcoinText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
@@ -241,24 +233,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToIndicador(View view){
-        Log.d("goToIndicador", (String) view.getTag());
         Intent intent = new Intent(MainActivity.this,IndicadorActivity.class);
         intent.putExtra("tipoData",(String) view.getTag());
         startActivity(intent);
     }
-
-    private String decimalFormat(String valor){
-        float numero = Float.parseFloat(valor);
-        DecimalFormat formato = new DecimalFormat("#,###.00");
-        String valorFormateado = formato.format(numero);
-        return  valorFormateado;
-    }
-
-    private String DateUtcToString(String fecha) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        Instant instantFecha  = Instant.parse(fecha);
-        return ZonedDateTime.ofInstant(instantFecha, ZoneId.of("America/Santiago")).format(dtf);
-    }
-
 
 }

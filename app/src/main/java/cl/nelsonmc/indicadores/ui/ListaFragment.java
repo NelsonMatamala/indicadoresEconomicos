@@ -7,23 +7,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-
 import cl.nelsonmc.indicadores.AdapterIndicadores;
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 
 public class ListaFragment extends Fragment {
 
-    private RecyclerView recyclerLista;
     private ArrayList<SerieIndicador> serieIndicadorArrayList;
+    private String tipoData;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
-            serieIndicadorArrayList = (ArrayList<SerieIndicador>) getArguments().getSerializable("ArrayList");
+            serieIndicadorArrayList = (ArrayList<SerieIndicador>) getArguments().getSerializable("arrayList");
+            tipoData = getArguments().getString("tipoData");
         }
     }
 
@@ -31,16 +31,13 @@ public class ListaFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lista,container,false);
-        recyclerLista = view.findViewById(R.id.recyclerLista);
-        recyclerLista.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
 
-        AdapterIndicadores adapterIndicadores = new AdapterIndicadores(serieIndicadorArrayList, new AdapterIndicadores.OnItemClickListener() {
-            @Override
-            public void onItemClick(SerieIndicador indicador) {
+        AdapterIndicadores adapterIndicadores = new AdapterIndicadores(serieIndicadorArrayList,tipoData);
 
-            }
-        });
+        RecyclerView recyclerLista = view.findViewById(R.id.recyclerLista);
+        recyclerLista.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         recyclerLista.setAdapter(adapterIndicadores);
+
         return view;
     }
 }

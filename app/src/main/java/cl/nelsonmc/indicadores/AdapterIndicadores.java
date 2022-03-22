@@ -6,17 +6,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 
 public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.ViewHolderIndicadores> {
     ArrayList<SerieIndicador> indicadores;
-    final AdapterIndicadores.OnItemClickListener listener;
+    String tipoData;
 
-    public AdapterIndicadores(ArrayList<SerieIndicador> indicadores, OnItemClickListener listener) {
+    public AdapterIndicadores(ArrayList<SerieIndicador> indicadores,String tipoData) {
         this.indicadores = indicadores;
-        this.listener = listener;
+        this.tipoData = tipoData;
     }
 
     @NonNull
@@ -36,33 +43,48 @@ public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.
         return indicadores.size();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(SerieIndicador indicador);
-    }
 
     public class ViewHolderIndicadores extends RecyclerView.ViewHolder {
 
         TextView fechaText;
         TextView valorText;
+        TextView tipoValor;
 
         public ViewHolderIndicadores(@NonNull View itemView) {
             super(itemView);
-
             fechaText = itemView.findViewById(R.id.fechaTextView);
             valorText = itemView.findViewById(R.id.valorTextView);
+            tipoValor = itemView.findViewById(R.id.tipoValor);
         }
 
         public void setListIndicadores(SerieIndicador indicadorModel) {
 
-            fechaText.setText(indicadorModel.getFecha());
-            valorText.setText(indicadorModel.getValor());
+            if(tipoData.equals("ipc") || tipoData.equals("imacec") || tipoData.equals("desempleo")){
+                tipoValor.setText("%");
+            }
+            if(tipoData.equals("bitcoin") || tipoData.equals("cobre") ){
+                tipoValor.setText("$US");
+            }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onItemClick(indicadorModel);
-                }
-            });
+            fechaText.setText(dateUtcToString(indicadorModel.getFecha()));
+            valorText.setText(decimalFormat(indicadorModel.getValor()));
         }
+
+        private String decimalFormat(String valor){
+            float numero = Float.parseFloat(valor);
+            DecimalFormat formato = new DecimalFormat("#,###.00");
+            formato.setMinimumIntegerDigits(1);
+            formato.setMinimumFractionDigits(0);
+            String valorFormateado = formato.format(numero);
+            return  valorFormateado;
+        }
+
+        private String dateUtcToString(String fecha) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            Instant instantFecha  = Instant.parse(fecha);
+            return ZonedDateTime.ofInstant(instantFecha, ZoneId.of("America/Santiago")).format(dtf);
+        }
+
+
     }
 }

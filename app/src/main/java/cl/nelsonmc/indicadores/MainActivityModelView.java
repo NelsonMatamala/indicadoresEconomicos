@@ -1,13 +1,22 @@
 package cl.nelsonmc.indicadores;
 
 import android.app.Application;
-
 import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+
+import java.lang.reflect.Type;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import cl.nelsonmc.indicadores.di.BaseApplication;
@@ -42,6 +51,7 @@ public class MainActivityModelView extends AndroidViewModel {
         cobreList       = new MutableLiveData<>();
         desempleoList   = new MutableLiveData<>();
         bitcoinList     = new MutableLiveData<>();
+        loadData();
     }
 
     public MutableLiveData<List<SerieIndicador>> getDolarListObserver() {
@@ -56,6 +66,33 @@ public class MainActivityModelView extends AndroidViewModel {
     public MutableLiveData<List<SerieIndicador>> getCobreListObserver() { return cobreList; }
     public MutableLiveData<List<SerieIndicador>> getDesempleoListObserver() { return desempleoList; }
     public MutableLiveData<List<SerieIndicador>> getBitcoinListObserver() { return bitcoinList; }
+
+    public void loadData(){
+        String json;
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<SerieIndicador>>() {}.getType();
+        json = sharedPreferences.getString("dolar", null);
+        dolarList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("euro", null);
+        euroList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("uf", null);
+        ufList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("ivp", null);
+        ivpList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("ipc", null);
+        ipcList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("utm", null);
+        utmList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("imacec", null);
+        imacecList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("cobre", null);
+        cobreList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("desempleo", null);
+        desempleoList.postValue(gson.fromJson(json, type));
+        json = sharedPreferences.getString("bitcoin", null);
+        bitcoinList.postValue(gson.fromJson(json, type));
+    }
 
     private void saveData(String tipoData,List<SerieIndicador> dataList){
         SharedPreferences sharedPreferences = getApplication().getSharedPreferences("shared preferences", MODE_PRIVATE);
@@ -254,5 +291,20 @@ public class MainActivityModelView extends AndroidViewModel {
                 bitcoinList.postValue(null);
             }
         });
+    }
+
+    public String decimalFormat(String valor){
+        float numero = Float.parseFloat(valor);
+        DecimalFormat formato = new DecimalFormat("#,###.00");
+        formato.setMinimumIntegerDigits(1);
+        formato.setMinimumFractionDigits(0);
+        String valorFormateado = formato.format(numero);
+        return  valorFormateado;
+    }
+
+    public String dateUtcToString(String fecha) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        Instant instantFecha  = Instant.parse(fecha);
+        return ZonedDateTime.ofInstant(instantFecha, ZoneId.of("America/Santiago")).format(dtf);
     }
 }

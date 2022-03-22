@@ -3,16 +3,14 @@ package cl.nelsonmc.indicadores;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
-import android.content.Entity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -21,10 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
-
 import java.util.ArrayList;
-
-
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 import cl.nelsonmc.indicadores.ui.CalcularFragment;
 import cl.nelsonmc.indicadores.ui.ListaFragment;
@@ -32,7 +27,8 @@ import cl.nelsonmc.indicadores.ui.ListaFragment;
 public class IndicadorActivity extends AppCompatActivity {
 
     private ArrayList<SerieIndicador> serieIndicadorArrayList;
-    private LineChart lineChart;
+    private String tipoData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +39,7 @@ public class IndicadorActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalcularFragment() ).commit();
 
         Bundle extras   = getIntent().getExtras();
-        String tipoData = extras.getString("tipoData");
+        tipoData = extras != null ? extras.getString("tipoData") : "";
 
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
@@ -55,15 +51,18 @@ public class IndicadorActivity extends AppCompatActivity {
         if (serieIndicadorArrayList == null) {
             serieIndicadorArrayList = new ArrayList<>();
         }
-        for (int i = 0;i < serieIndicadorArrayList.size();i++){
-            float valor = Float.parseFloat(serieIndicadorArrayList.get(i).getValor());
-            Log.d("serieIndicadorArrayList",valor+"");
-        }
-        Log.d("serieIndicadorArrayList","****************");
 
-        lineChart = findViewById(R.id.reportingChart);
+        LineChart lineChart = findViewById(R.id.reportingChart);
         lineChart.setTouchEnabled(true);
         lineChart.setPinchZoom(true);
+
+        lineChart.getAxisRight().setEnabled(false);
+        lineChart.getDescription().setText("");
+        lineChart.getXAxis().setDrawGridLines(false);
+        lineChart.getXAxis().setDrawAxisLine(false);
+        lineChart.getXAxis().setEnabled(false);
+
+
 
         LineDataSet lineDataSet = new LineDataSet(dataValues1(),"Data set 1");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -95,7 +94,7 @@ public class IndicadorActivity extends AppCompatActivity {
         //to remove the cricle from the graph
         lineDataSet.setDrawCircles(false);
 
-
+        lineDataSet.setDrawHighlightIndicators(false);
         dataSets.add(lineDataSet);
         LineData data = new LineData(dataSets);
 
@@ -123,21 +122,28 @@ public class IndicadorActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-            Fragment selectedFragment = null;
+            Fragment selectedFragment;
+            Bundle datos;
 
             switch (menuItem.getItemId()){
 
                 case R.id.calcular:
+                    datos = new Bundle();
+                    datos.putString("tipoData",tipoData);
                     selectedFragment = new CalcularFragment();
+                    selectedFragment.setArguments(datos);
                     break;
 
                 case R.id.lista:
-                    Bundle datos = new Bundle();
-                    datos.putSerializable("ArrayList",serieIndicadorArrayList);
+                    datos = new Bundle();
+                    datos.putSerializable("arrayList",serieIndicadorArrayList);
+                    datos.putString("tipoData",tipoData);
                     selectedFragment = new ListaFragment();
                     selectedFragment.setArguments(datos);
                     break;
 
+                default:
+                    selectedFragment = new CalcularFragment();
             }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
