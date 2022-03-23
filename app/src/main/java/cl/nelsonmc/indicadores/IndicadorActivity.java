@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -33,14 +35,13 @@ public class IndicadorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indicador);
-
+        TextView tittle = findViewById(R.id.textTitulo);
         BottomNavigationView bottomNav = findViewById(R.id.navigator_bottom);
         bottomNav.setOnNavigationItemSelectedListener( bottomListener );
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalcularFragment() ).commit();
 
         Bundle extras   = getIntent().getExtras();
         tipoData = extras != null ? extras.getString("tipoData") : "";
-
+        tittle.setText(tipoData.toUpperCase());
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString(tipoData, null);
@@ -52,69 +53,54 @@ public class IndicadorActivity extends AppCompatActivity {
             serieIndicadorArrayList = new ArrayList<>();
         }
 
+        Bundle datos = new Bundle();
+        datos.putString("tipoData",tipoData);
+        datos.putSerializable("indicador",serieIndicadorArrayList.get(0));
+        Fragment calcularFragment = new CalcularFragment();
+        calcularFragment.setArguments(datos);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, calcularFragment ).commit();
+
         LineChart lineChart = findViewById(R.id.reportingChart);
         lineChart.setTouchEnabled(true);
         lineChart.setPinchZoom(true);
-
         lineChart.getAxisRight().setEnabled(false);
         lineChart.getDescription().setText("");
         lineChart.getXAxis().setDrawGridLines(false);
         lineChart.getXAxis().setDrawAxisLine(false);
         lineChart.getXAxis().setEnabled(false);
 
-
-
         LineDataSet lineDataSet = new LineDataSet(dataValues1(),"Data set 1");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        lineDataSet.setLineWidth(3f);
-        lineDataSet.setColor(Color.GRAY);
-        lineDataSet.setHighLightColor(Color.RED);
+
+        lineDataSet.setLineWidth(2f);
+        lineDataSet.setColor(Color.BLUE);
         //lineDataSet.setDrawValues(false);  //quita los numeros
-
-
-        //to make the smooth line as the graph is adrapt change so smooth curve
         lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        //to enable the cubic density : if 1 then it will be sharp curve
         lineDataSet.setCubicIntensity(0.2f);
-
-        //to fill the below of smooth line in graph
         lineDataSet.setDrawFilled(true);
-        lineDataSet.setFillColor(Color.BLACK);
-        //set the transparency
+        lineDataSet.setFillDrawable(getResources().getDrawable(R.drawable.gradient_graph));
         lineDataSet.setFillAlpha(80);
-
-        //set the gradiant then the above draw fill color will be replace
-        //Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.gradiant);
-        //lineDataSet.setFillDrawable(drawable);
-
-        //set legend disable or enable to hide {the left down corner name of graph}
         Legend legend = lineChart.getLegend();
         legend.setEnabled(false);
-
         //to remove the cricle from the graph
         lineDataSet.setDrawCircles(false);
-
         lineDataSet.setDrawHighlightIndicators(false);
         dataSets.add(lineDataSet);
-        LineData data = new LineData(dataSets);
 
+        LineData data = new LineData(dataSets);
         lineChart.setData(data);
         lineChart.invalidate();
 
     }
 
+
     private ArrayList<Entry> dataValues1(){
-
-
         ArrayList<Entry> dataVals = new ArrayList<Entry>();
         int arraySize = serieIndicadorArrayList.size();
         for (int i = 0;i < arraySize;i++){
-
             float valor = Float.parseFloat(serieIndicadorArrayList.get(arraySize - i -1).getValor());
-            Log.d("serieIndicadorArrayList",valor+"");
             dataVals.add(new Entry(i,valor));
         }
-
         return dataVals;
     }
 
@@ -130,6 +116,7 @@ public class IndicadorActivity extends AppCompatActivity {
                 case R.id.calcular:
                     datos = new Bundle();
                     datos.putString("tipoData",tipoData);
+                    datos.putSerializable("indicador",serieIndicadorArrayList.get(0));
                     selectedFragment = new CalcularFragment();
                     selectedFragment.setArguments(datos);
                     break;

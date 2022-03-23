@@ -24,14 +24,14 @@
                 android:layout_height="match_parent"
                 android:onClick="goToIndicador"
                 app:cardCornerRadius="5dp"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:background="@drawable/gradient_cardview"
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -97,14 +97,13 @@
                 android:layout_height="match_parent"
                 android:onClick="goToIndicador"
                 app:cardCornerRadius="5dp"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -170,14 +169,13 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
                 android:onClick="goToIndicador"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -243,14 +241,13 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
                 android:onClick="goToIndicador"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -316,14 +313,13 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
                 android:onClick="goToIndicador"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -389,14 +385,13 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
                 android:onClick="goToIndicador"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -462,14 +457,13 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
                 android:onClick="goToIndicador"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -535,14 +529,13 @@
             android:layout_height="match_parent"
             app:cardCornerRadius="5dp"
             android:onClick="goToIndicador"
-            app:cardBackgroundColor="@color/colorCardBackground"
-            style="@style/MarginCardView">
+            style="@style/CardViewMain">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                style="@style/lnCardview">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -608,14 +601,13 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
                 android:onClick="goToIndicador"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -681,14 +673,13 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="5dp"
                 android:onClick="goToIndicador"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                style="@style/MarginCardView">
+                style="@style/CardViewMain">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    style="@style/lnCardview">
 
                     <LinearLayout
                         android:layout_width="wrap_content"

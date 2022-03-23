@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.List;
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 
@@ -237,5 +236,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("tipoData",(String) view.getTag());
         startActivity(intent);
     }
+
+   
 
 }

@@ -295,6 +295,7 @@ public class MainActivityModelView extends AndroidViewModel {
 
     public String decimalFormat(String valor){
         float numero = Float.parseFloat(valor);
+        //DecimalFormat formato = new DecimalFormat("#,###");
         DecimalFormat formato = new DecimalFormat("#,###.00");
         formato.setMinimumIntegerDigits(1);
         formato.setMinimumFractionDigits(0);

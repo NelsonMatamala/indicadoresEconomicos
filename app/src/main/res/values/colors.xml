@@ -7,4 +7,5 @@
     <color name="colorFontValor">#000</color>
     <color name="colorCardBackground">#E2E5E6</color>
     <color name="colorCirculoPeso">#CBD1D3</color>
+    <color name="colorTittleIndicador">#3700B3</color>
 </resources>
