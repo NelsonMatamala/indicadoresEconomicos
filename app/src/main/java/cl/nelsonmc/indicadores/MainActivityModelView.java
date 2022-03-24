@@ -8,16 +8,15 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
-
 import java.lang.reflect.Type;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import cl.nelsonmc.indicadores.di.BaseApplication;
 import cl.nelsonmc.indicadores.modelos.DataIndicador;
@@ -32,6 +31,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainActivityModelView extends AndroidViewModel {
     @Inject
     WebClient client;
+
     private MutableLiveData<List<SerieIndicador>> dolarList,euroList;
     private MutableLiveData<List<SerieIndicador>> ufList,ivpList;
     private MutableLiveData<List<SerieIndicador>> ipcList,utmList;
@@ -41,6 +41,7 @@ public class MainActivityModelView extends AndroidViewModel {
     public MainActivityModelView(@NonNull Application application){
         super(application);
         ((BaseApplication)getApplication()).getRetrofitComponent().inject(this);
+        //((BaseApplication)getApplication()).getFuncionesComponent().inject(this);
         dolarList       = new MutableLiveData<>();
         euroList        = new MutableLiveData<>();
         ufList          = new MutableLiveData<>();
@@ -295,11 +296,9 @@ public class MainActivityModelView extends AndroidViewModel {
 
     public String decimalFormat(String valor){
         float numero = Float.parseFloat(valor);
-        //DecimalFormat formato = new DecimalFormat("#,###");
-        DecimalFormat formato = new DecimalFormat("#,###.00");
-        formato.setMinimumIntegerDigits(1);
-        formato.setMinimumFractionDigits(0);
-        String valorFormateado = formato.format(numero);
+        Locale chileLocale = new Locale("es","CL");
+        NumberFormat nf = NumberFormat.getNumberInstance(chileLocale);
+        String valorFormateado = nf.format(numero);
         return  valorFormateado;
     }
 

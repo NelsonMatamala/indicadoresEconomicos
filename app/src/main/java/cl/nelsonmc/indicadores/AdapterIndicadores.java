@@ -6,20 +6,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
-
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 
 public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.ViewHolderIndicadores> {
-    ArrayList<SerieIndicador> indicadores;
-    String tipoData;
+    private ArrayList<SerieIndicador> indicadores;
+    private String tipoData;
 
     public AdapterIndicadores(ArrayList<SerieIndicador> indicadores,String tipoData) {
         this.indicadores = indicadores;
@@ -72,10 +71,9 @@ public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.
 
         private String decimalFormat(String valor){
             float numero = Float.parseFloat(valor);
-            DecimalFormat formato = new DecimalFormat("#,###.00");
-            formato.setMinimumIntegerDigits(1);
-            formato.setMinimumFractionDigits(0);
-            String valorFormateado = formato.format(numero);
+            Locale chileLocale = new Locale("es","CL");
+            NumberFormat nf = NumberFormat.getNumberInstance(chileLocale);
+            String valorFormateado = nf.format(numero);
             return  valorFormateado;
         }
 

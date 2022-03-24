@@ -6,13 +6,10 @@ import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -30,6 +27,7 @@ public class IndicadorActivity extends AppCompatActivity {
 
     private ArrayList<SerieIndicador> serieIndicadorArrayList;
     private String tipoData;
+    private LineChart lineChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class IndicadorActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener( bottomListener );
 
         Bundle extras   = getIntent().getExtras();
-        tipoData = extras != null ? extras.getString("tipoData") : "";
+        tipoData        = extras != null ? extras.getString("tipoData") : "";
         tittle.setText(tipoData.toUpperCase());
         SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
         Gson gson = new Gson();
@@ -60,7 +58,11 @@ public class IndicadorActivity extends AppCompatActivity {
         calcularFragment.setArguments(datos);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, calcularFragment ).commit();
 
-        LineChart lineChart = findViewById(R.id.reportingChart);
+        createGraph();
+    }
+
+    private void createGraph(){
+        lineChart = findViewById(R.id.reportingChart);
         lineChart.setTouchEnabled(true);
         lineChart.setPinchZoom(true);
         lineChart.getAxisRight().setEnabled(false);
@@ -90,9 +92,7 @@ public class IndicadorActivity extends AppCompatActivity {
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
         lineChart.invalidate();
-
     }
-
 
     private ArrayList<Entry> dataValues1(){
         ArrayList<Entry> dataVals = new ArrayList<Entry>();

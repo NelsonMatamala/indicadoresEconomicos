@@ -42,11 +42,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
                     fechaDolarText.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                    valorDolarText.setText(serieIndicador.get(0).getValor());
+                    valorDolarText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
-                        trendingDolar.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                        trendingDolar.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
             }
@@ -58,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
                 fechaEuroTextView.setText(viewModel.dateUtcToString( serieIndicador.get(0).getFecha() ));
-                valorEuroText.setText(serieIndicador.get(0).getValor() );
+                valorEuroText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()) );
                 float valorHoy  = Float.parseFloat(serieIndicador.get(0).getValor());
                 float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                 if(valorHoy < valorAyer){
-                    trendingEuro.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                    trendingEuro.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
                 }
             }
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
-                        trendingUF.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                        trendingUF.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
             }
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                    float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                    float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                    if (valorHoy < valorAyer) {
-                       trendingIVP.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                       trendingIVP.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                    }
                }
            }
@@ -106,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
                     fechaIPCTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                    valorIPCText.setText(serieIndicador.get(0).getValor());
+                    valorIPCText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
-                        trendingIPC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                        trendingIPC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
             }
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
-                        trendingUTM.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                        trendingUTM.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
             }
@@ -138,11 +138,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
                     fechaIMACECTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                    valorIMACECText.setText(serieIndicador.get(0).getValor());
+                    valorIMACECText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
-                        trendingIMACEC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                        trendingIMACEC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
             }
@@ -154,11 +154,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
                     fechaCobreTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                    valorCobreText.setText(serieIndicador.get(0).getValor());
+                    valorCobreText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
-                        trendingCobre.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                        trendingCobre.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
             }
@@ -170,11 +170,11 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<SerieIndicador> serieIndicador) {
                 if(serieIndicador != null) {
                     fechaDesempleoText.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                    valorDesempleoText.setText(serieIndicador.get(0).getValor());
+                    valorDesempleoText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
-                        trendingDesempleo.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                        trendingDesempleo.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
             }
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
                     float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
                     if (valorHoy < valorAyer) {
-                        trendingBitcoin.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ictrending_down));
+                        trendingBitcoin.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
             }
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         valorCobreText      = findViewById(R.id.valorCobreTextView);
         fechaDesempleoText  = findViewById(R.id.fechaDesempleoTextView);
         valorDesempleoText  = findViewById(R.id.valorDesempleoTextView);
-        fechaBitcoinText    = findViewById(R.id.valorBitcoinTextView);
+        fechaBitcoinText    = findViewById(R.id.fechaBitcoinTextView);
         valorBitcoinText    = findViewById(R.id.valorBitcoinTextView);
         trendingDolar       = findViewById(R.id.trendingDolar);
         trendingEuro        = findViewById(R.id.trendingEuro);
