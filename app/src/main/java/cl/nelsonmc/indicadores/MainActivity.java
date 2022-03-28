@@ -1,15 +1,22 @@
 package cl.nelsonmc.indicadores;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
 import java.util.List;
+import java.util.Objects;
+
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 
 public class MainActivity extends AppCompatActivity {
@@ -199,6 +206,13 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void setUpView(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        CollapsingToolbarLayout coll_toolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        coll_toolbar.setTitle("Indicadores");
+        coll_toolbar.setCollapsedTitleTextAppearance(R.style.coll_toolbar_title);
+        coll_toolbar.setExpandedTitleTextAppearance(R.style.exp_toolbar_title);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         fechaDolarText      = findViewById(R.id.fechaDolarTextView);
         valorDolarText      = findViewById(R.id.valorDolarTextView);
         fechaEuroTextView   = findViewById(R.id.fechaEuroTextView);

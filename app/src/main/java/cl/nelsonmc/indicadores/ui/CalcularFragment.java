@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,10 +25,9 @@ import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 public class CalcularFragment extends Fragment {
     private SerieIndicador serieIndicador;
     private String tipoData;
-    private float valor;
-    private EditText editTextNumber, editTextValorIndicador, editTextValorCalculo;
-    private TextView textViewUp,textViewDown,textViewUltimaFecha;
-    private ImageButton btnChange;
+    private EditText editTextNumber, editTextValorCalculo;
+    private TextView textViewUp;
+    private TextView textViewDown;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,28 +42,32 @@ public class CalcularFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calcular,container,false);
-        btnChange = view.findViewById(R.id.btnChange);
+        ImageButton btnChange = view.findViewById(R.id.btnChange);
+        LinearLayout linearLayout = view.findViewById(R.id.ly_contenedor);
+        TextView textUltimaFecha = view.findViewById(R.id.ultimaFechaText);
         textViewUp = view.findViewById(R.id.textViewUp);
         textViewDown = view.findViewById(R.id.textViewDown);
         editTextNumber = view.findViewById(R.id.editTextIndicador);
-        textViewUltimaFecha = view.findViewById(R.id.ultimaFechaText);
         textViewUp.setText(tipoData.toUpperCase());
         textViewUp.setTag(tipoData.toUpperCase());
-        textViewUltimaFecha.setText(dateUtcToString(serieIndicador.getFecha()));
+        textUltimaFecha.setText(dateUtcToString(serieIndicador.getFecha()));
         editTextValorCalculo = view.findViewById(R.id.editTextCalculo);
 
         if(tipoData.equals("bitcoin")){
             textViewDown.setText(R.string.usd);
         }
 
-        editTextValorIndicador = view.findViewById(R.id.editTextCalculo);
+        if(tipoData.equals("ivp") || tipoData.equals("ipc") || tipoData.equals("imacec")
+                || tipoData.equals("cobre") || tipoData.equals("desempleo")){
+            linearLayout.setVisibility(View.GONE);
+        }
+
         calculateAndSetValue();
 
         editTextNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (editTextNumber.getText().toString().equals("")){
@@ -71,7 +75,6 @@ public class CalcularFragment extends Fragment {
                 }
                 calculateAndSetValue();
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
             }
@@ -92,21 +95,20 @@ public class CalcularFragment extends Fragment {
 
     private void calculateAndSetValue(){
         float indicadorValor = Float.parseFloat(serieIndicador.getValor());
-        valor = Float.parseFloat(editTextNumber.getText().toString());
+        float valor = Float.parseFloat(editTextNumber.getText().toString());
         float multiplicacion;
         if(textViewUp.getTag().equals(textViewUp.getText())){
              multiplicacion = valor * indicadorValor;
         }else{
              multiplicacion = valor / indicadorValor;
         }
-        editTextValorIndicador.setText(decimalFormat(multiplicacion));
+        editTextValorCalculo.setText(decimalFormat(multiplicacion));
     }
 
     private String decimalFormat(float valor){
         Locale chileLocale = new Locale("es","CL");
         NumberFormat nf = NumberFormat.getNumberInstance(chileLocale);
-        String valorFormateado = nf.format(valor);
-        return  valorFormateado;
+        return  nf.format(valor);
     }
 
     public String dateUtcToString(String fecha) {

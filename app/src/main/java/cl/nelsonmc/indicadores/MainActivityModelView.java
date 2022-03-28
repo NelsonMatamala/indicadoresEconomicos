@@ -41,7 +41,6 @@ public class MainActivityModelView extends AndroidViewModel {
     public MainActivityModelView(@NonNull Application application){
         super(application);
         ((BaseApplication)getApplication()).getRetrofitComponent().inject(this);
-        //((BaseApplication)getApplication()).getFuncionesComponent().inject(this);
         dolarList       = new MutableLiveData<>();
         euroList        = new MutableLiveData<>();
         ufList          = new MutableLiveData<>();
