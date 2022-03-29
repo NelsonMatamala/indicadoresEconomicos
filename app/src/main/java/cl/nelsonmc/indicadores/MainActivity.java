@@ -1,18 +1,27 @@
 package cl.nelsonmc.indicadores;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView trendingIVP,trendingIPC,trendingUTM,trendingIMACEC;
     private ImageView trendingCobre,trendingDesempleo,trendingBitcoin;
     private MainActivityModelView viewModel;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setUpView();
 
         viewModel = new ViewModelProvider(this).get(MainActivityModelView.class);
+
         viewModel.getDolarListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
             public void onChanged(List<SerieIndicador> serieIndicador) {
@@ -58,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        viewModel.requestDolarData();
 
         viewModel.getEuroListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -72,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
                     trendingEuro.setImageDrawable( ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-        viewModel.requestEuroData();
 
         viewModel.getUFListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -88,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
                         trendingUF.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-        viewModel.requestUFData();
 
         viewModel.getIVPListObserver().observe(this, new Observer<List<SerieIndicador>>() {
            @Override
@@ -104,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
                        trendingIVP.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                    }
                }
+               swipeRefreshLayout.setRefreshing(false);
            }
        });
-        viewModel.requestIVPData();
 
         viewModel.getIPCListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -120,9 +129,9 @@ public class MainActivity extends AppCompatActivity {
                         trendingIPC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-        viewModel.requestIPCData();
 
         viewModel.getUTMListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -136,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
                         trendingUTM.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-        viewModel.requestUTMData();
 
         viewModel.getIMACECListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -152,9 +161,9 @@ public class MainActivity extends AppCompatActivity {
                         trendingIMACEC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-        viewModel.requestIMACECData();
 
         viewModel.getCobreListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -168,9 +177,9 @@ public class MainActivity extends AppCompatActivity {
                         trendingCobre.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-        viewModel.requestCobreData();
 
         viewModel.getDesempleoListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -184,9 +193,9 @@ public class MainActivity extends AppCompatActivity {
                         trendingDesempleo.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-        viewModel.requestDesempleoData();
 
         viewModel.getBitcoinListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -200,11 +209,25 @@ public class MainActivity extends AppCompatActivity {
                         trendingBitcoin.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+        actualizar();
+    }
+    private void actualizar(){
+        viewModel.requestDolarData();
+        viewModel.requestEuroData();
+        viewModel.requestUFData();
+        viewModel.requestIVPData();
+        viewModel.requestIPCData();
+        viewModel.requestUTMData();
+        viewModel.requestIMACECData();
+        viewModel.requestCobreData();
+        viewModel.requestDesempleoData();
         viewModel.requestBitcoinData();
     }
-    
+
     private void setUpView(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -213,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
         coll_toolbar.setCollapsedTitleTextAppearance(R.style.coll_toolbar_title);
         coll_toolbar.setExpandedTitleTextAppearance(R.style.exp_toolbar_title);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
+        swipeRefreshLayout  = findViewById(R.id.swipe_refresh);
         fechaDolarText      = findViewById(R.id.fechaDolarTextView);
         valorDolarText      = findViewById(R.id.valorDolarTextView);
         fechaEuroTextView   = findViewById(R.id.fechaEuroTextView);
@@ -243,6 +267,13 @@ public class MainActivity extends AppCompatActivity {
         trendingCobre       = findViewById(R.id.trendingCobre);
         trendingDesempleo   = findViewById(R.id.trendingDesempleo);
         trendingBitcoin     = findViewById(R.id.trendingBitcoin);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                actualizar();
+            }
+        });
     }
 
     public void goToIndicador(View view){
@@ -251,6 +282,25 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-   
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_top,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.showBottomMenu:
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                        MainActivity.this,R.style.BottomSheetDialogTheme);
+                View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                        .inflate(R.layout.layout_bottom_sheet,(LinearLayout)findViewById(R.id.bottomSheetContainer));
+                bottomSheetDialog.setContentView(bottomSheetView);
+                bottomSheetDialog.show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }
