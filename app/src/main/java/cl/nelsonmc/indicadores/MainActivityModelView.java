@@ -51,7 +51,6 @@ public class MainActivityModelView extends AndroidViewModel {
         cobreList       = new MutableLiveData<>();
         desempleoList   = new MutableLiveData<>();
         bitcoinList     = new MutableLiveData<>();
-        loadData();
     }
 
     public MutableLiveData<List<SerieIndicador>> getDolarListObserver() {

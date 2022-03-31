@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1A237E</color>
+    <color name="colorPrimaryDark">#000</color>
+    <color name="colorBackground">#000</color>
+    <color name="colorAccent">#42A5F5</color>
+    <color name="colorArrow">#FF9800</color>
+    <color name="colorFontValor">#FFF</color>
+    <color name="colorCardBackgroundEnd">#000</color>
+    <color name="colorCardBackgroundStart">#1A237E</color>
+    <color name="colorWhite">#FFF</color>
+    <color name="colorTextoIndicador">#BBDEFB</color>
+    <color name="colorCirculoPeso">#979A9A</color>
+    <color name="colorIcon">#FFF</color>
+    <color name="colorBackgroundbBSheet">#212121</color>
+</resources>

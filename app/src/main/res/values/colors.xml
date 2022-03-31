@@ -2,11 +2,15 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#1A237E</color>
-    <color name="colorAccent">#42A5F5</color>
-    <color name="colorRojo">#C82518</color>
+    <color name="colorBackground">#FFF</color>
+    <color name="colorAccent">#2196F3</color>
+    <color name="colorArrow">#C82518</color>
     <color name="colorFontValor">#1C1949</color>
-    <color name="colorCardBackground">#E2E5E6</color>
+    <color name="colorCardBackgroundEnd">#E2E5E6</color>
+    <color name="colorCardBackgroundStart">#E2EBF0</color>
     <color name="colorWhite">#FFF</color>
+    <color name="colorTextoIndicador">#1A237E</color>
     <color name="colorCirculoPeso">#979A9A</color>
-    <color name="colorTittleIndicador">#3700B3</color>
+    <color name="colorIcon">#000</color>
+    <color name="colorBackgroundbBSheet">#F5F5F5</color>
 </resources>

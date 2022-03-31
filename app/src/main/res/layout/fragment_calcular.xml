@@ -9,12 +9,13 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Última actualización"
+        android:text="@string/ultima_actualizacion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="16sp"
+        android:textColor="@color/colorFontValor"
         android:fontFamily="@font/poppins_normal"
-        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginTop="12dp"/>
 
     <TextView
@@ -22,10 +23,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_marginRight="12dp"
+        android:textColor="@color/colorFontValor"
+        android:layout_marginEnd="12dp"
         android:textSize="17sp"
         android:fontFamily="@font/kameron_normal"
+        android:layout_marginTop="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -51,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:textSize="15sp"
+                android:textColor="@color/colorFontValor"
                 android:fontFamily="@font/poppins_medium"
                 android:text="TextView" />
 
@@ -60,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:textSize="15sp"
+                android:textColor="@color/colorFontValor"
                 android:fontFamily="@font/poppins_medium"
                 android:text="$CLP" />
 
@@ -81,6 +85,7 @@
                 android:textSize="20sp"
                 android:fontFamily="@font/kameron_normal"
                 android:inputType="numberDecimal"
+                style="@style/editTextStyle"
                 android:text="1" />
 
             <EditText
@@ -90,7 +95,7 @@
                 android:fontFamily="@font/kameron_normal"
                 android:enabled="false"
                 android:textSize="20sp"
-                android:textColor="#000"
+                style="@style/editTextStyle"
                 android:inputType="none" />
 
         </LinearLayout>

@@ -2,21 +2,29 @@ package cl.nelsonmc.indicadores;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView trendingCobre,trendingDesempleo,trendingBitcoin;
     private MainActivityModelView viewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private BottomSheetDialog bottomSheetDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         setUpView();
 
         viewModel = new ViewModelProvider(this).get(MainActivityModelView.class);
+
+        viewModel.loadData();
 
         viewModel.getDolarListObserver().observe(this, new Observer<List<SerieIndicador>>() {
             @Override
@@ -215,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
         actualizar();
     }
+
     private void actualizar(){
         viewModel.requestDolarData();
         viewModel.requestEuroData();
@@ -274,12 +286,18 @@ public class MainActivity extends AppCompatActivity {
                 actualizar();
             }
         });
+        darkModeVerification();
     }
 
     public void goToIndicador(View view){
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        String json = sharedPreferences.getString((String)view.getTag(), null);
+        if(json == null){
+            return;
+        }
         Intent intent = new Intent(MainActivity.this,IndicadorActivity.class);
         intent.putExtra("tipoData",(String) view.getTag());
-        startActivity(intent);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
     }
 
     @Override
@@ -292,15 +310,69 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.showBottomMenu:
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                        MainActivity.this,R.style.BottomSheetDialogTheme);
-                View bottomSheetView = LayoutInflater.from(getApplicationContext())
-                        .inflate(R.layout.layout_bottom_sheet,(LinearLayout)findViewById(R.id.bottomSheetContainer));
-                bottomSheetDialog.setContentView(bottomSheetView);
+                bottomSheetDialog = new BottomSheetDialog(this,R.style.BottomSheetDialogTheme);
+                bottomSheetDialog.setContentView(R.layout.layout_bottom_sheet);
+                darkModeOpciones();
+                RadioGroup radioGroup = bottomSheetDialog.findViewById(R.id.radio_group);
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                        switch(checkedId) {
+                            case R.id.rb_claro:
+                                PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("dark_mode", "no").apply();
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                                bottomSheetDialog.dismiss();
+                                break;
+
+                            case R.id.rb_oscuro:
+                                PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("dark_mode", "si").apply();
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                                bottomSheetDialog.dismiss();
+                                break;
+
+                            case R.id.rb_sistema:
+                                PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("dark_mode", "sistema").apply();
+                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                                bottomSheetDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
                 bottomSheetDialog.show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void darkModeVerification(){
+        String darkMode = PreferenceManager.getDefaultSharedPreferences(this).getString("dark_mode", "sistema");
+        if (darkMode.equals("si")){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else if (darkMode.equals("no")){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    private void darkModeOpciones(){
+        String darkMode = PreferenceManager.getDefaultSharedPreferences(this).getString("dark_mode", "sistema");
+        RadioButton rb_claro    = bottomSheetDialog.findViewById(R.id.rb_claro);
+        RadioButton rb_oscuro   = bottomSheetDialog.findViewById(R.id.rb_oscuro);
+        RadioButton rb_sistema  = bottomSheetDialog.findViewById(R.id.rb_sistema);
+
+        if (Build.VERSION.SDK_INT < 29 ){
+            rb_sistema.setVisibility(View.GONE);
+        }
+
+        if (darkMode != null) {
+            if (darkMode.equals("si")){
+                rb_oscuro.setChecked(true);
+            }else if(darkMode.equals("no")){
+                rb_claro.setChecked(true);
+            }else{
+                rb_sistema.setChecked(true);
+            }
+        }
+
     }
 
 }
