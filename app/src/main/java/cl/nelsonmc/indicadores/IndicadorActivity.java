@@ -2,6 +2,7 @@ package cl.nelsonmc.indicadores;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.Color;

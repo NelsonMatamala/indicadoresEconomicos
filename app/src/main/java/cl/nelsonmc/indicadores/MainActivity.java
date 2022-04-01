@@ -12,28 +12,20 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.List;
 import java.util.Objects;
-
 import cl.nelsonmc.indicadores.modelos.SerieIndicador;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomSheetDialog bottomSheetDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -308,16 +301,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.showBottomMenu:
-                bottomSheetDialog = new BottomSheetDialog(this,R.style.BottomSheetDialogTheme);
-                bottomSheetDialog.setContentView(R.layout.layout_bottom_sheet);
-                darkModeOpciones();
-                RadioGroup radioGroup = bottomSheetDialog.findViewById(R.id.radio_group);
+        if (item.getItemId() == R.id.showBottomMenu) {
+            bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
+            bottomSheetDialog.setContentView(R.layout.layout_bottom_sheet);
+            darkModeOpciones();
+            RadioGroup radioGroup = bottomSheetDialog.findViewById(R.id.radio_group);
+            if (radioGroup != null) {
                 radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                        switch(checkedId) {
+                        switch (checkedId) {
                             case R.id.rb_claro:
                                 PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("dark_mode", "no").apply();
                                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -338,8 +331,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-                bottomSheetDialog.show();
-                return true;
+            }
+            bottomSheetDialog.show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
