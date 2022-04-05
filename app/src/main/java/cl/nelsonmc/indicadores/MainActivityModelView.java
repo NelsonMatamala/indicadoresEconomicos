@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import cl.nelsonmc.indicadores.di.BaseApplication;
-import cl.nelsonmc.indicadores.modelos.DataIndicador;
-import cl.nelsonmc.indicadores.modelos.SerieIndicador;
+import cl.nelsonmc.indicadores.model.DataIndicador;
+import cl.nelsonmc.indicadores.model.SerieIndicador;
 import cl.nelsonmc.indicadores.webServices.WebClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -102,7 +102,20 @@ public class MainActivityModelView extends AndroidViewModel {
         editor.apply();
     }
 
-    public void requestDolarData() {
+    public void actualizarValores(){
+        requestDolarData();
+        requestEuroData();
+        requestUFData();
+        requestIVPData();
+        requestIPCData();
+        requestUTMData();
+        requestIMACECData();
+        requestCobreData();
+        requestDesempleoData();
+        requestBitcoinData();
+    }
+
+    private void requestDolarData() {
         Call<DataIndicador> call = client.getDataDolar();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -121,7 +134,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestEuroData(){
+    private void requestEuroData(){
         Call<DataIndicador> call = client.getDataEuro();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -140,7 +153,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestUFData(){
+    private void requestUFData(){
         Call<DataIndicador> call = client.getDataUF();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -159,7 +172,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestIVPData(){
+    private void requestIVPData(){
         Call<DataIndicador> call = client.getDataIVP();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -178,7 +191,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestIPCData(){
+    private void requestIPCData(){
         Call<DataIndicador> call = client.getDataIPC();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -197,7 +210,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestUTMData(){
+    private void requestUTMData(){
         Call<DataIndicador> call = client.getDataUTM();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -216,7 +229,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestIMACECData(){
+    private void requestIMACECData(){
         Call<DataIndicador> call = client.getDataIMACEC();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -235,7 +248,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestCobreData(){
+    private void requestCobreData(){
         Call<DataIndicador> call = client.getDataLibraCobre();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -254,7 +267,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestDesempleoData(){
+    private void requestDesempleoData(){
         Call<DataIndicador> call = client.getDataDesempleo();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -273,7 +286,7 @@ public class MainActivityModelView extends AndroidViewModel {
         });
     }
 
-    public void requestBitcoinData(){
+    private void requestBitcoinData(){
         Call<DataIndicador> call = client.getDataBitcoin();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -296,8 +309,7 @@ public class MainActivityModelView extends AndroidViewModel {
         float numero = Float.parseFloat(valor);
         Locale chileLocale = new Locale("es","CL");
         NumberFormat nf = NumberFormat.getNumberInstance(chileLocale);
-        String valorFormateado = nf.format(numero);
-        return  valorFormateado;
+        return  nf.format(numero);
     }
 
     public String dateUtcToString(String fecha) {

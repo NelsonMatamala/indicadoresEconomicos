@@ -1,8 +1,7 @@
-package cl.nelsonmc.indicadores;
+package cl.nelsonmc.indicadores.indicadores;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -20,9 +19,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import cl.nelsonmc.indicadores.modelos.SerieIndicador;
-import cl.nelsonmc.indicadores.ui.CalcularFragment;
-import cl.nelsonmc.indicadores.ui.ListaFragment;
+import cl.nelsonmc.indicadores.R;
+import cl.nelsonmc.indicadores.model.SerieIndicador;
 
 public class IndicadorActivity extends AppCompatActivity {
 
@@ -47,7 +45,6 @@ public class IndicadorActivity extends AppCompatActivity {
         Type type = new TypeToken<ArrayList<SerieIndicador>>() {}.getType();
         serieIndicadorArrayList = gson.fromJson(json, type);
 
-        // checking below if the array list is empty or not
         if (serieIndicadorArrayList == null) {
             serieIndicadorArrayList = new ArrayList<>();
         }
@@ -72,7 +69,7 @@ public class IndicadorActivity extends AppCompatActivity {
         lineChart.getXAxis().setDrawAxisLine(false);
         lineChart.getXAxis().setEnabled(false);
 
-        LineDataSet lineDataSet = new LineDataSet(dataValues1(),"Data set 1");
+        LineDataSet lineDataSet = new LineDataSet(valoresIndicador(),"Valores");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
 
         lineDataSet.setLineWidth(2f);
@@ -85,7 +82,6 @@ public class IndicadorActivity extends AppCompatActivity {
         lineDataSet.setFillAlpha(80);
         Legend legend = lineChart.getLegend();
         legend.setEnabled(false);
-        //to remove the cricle from the graph
         lineDataSet.setDrawCircles(false);
         lineDataSet.setDrawHighlightIndicators(false);
         dataSets.add(lineDataSet);
@@ -95,7 +91,7 @@ public class IndicadorActivity extends AppCompatActivity {
         lineChart.invalidate();
     }
 
-    private ArrayList<Entry> dataValues1(){
+    private ArrayList<Entry> valoresIndicador(){
         ArrayList<Entry> dataVals = new ArrayList<Entry>();
         int arraySize = serieIndicadorArrayList.size();
         for (int i = 0;i < arraySize;i++){

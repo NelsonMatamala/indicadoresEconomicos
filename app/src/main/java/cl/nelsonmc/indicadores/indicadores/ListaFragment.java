@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.ui;
+package cl.nelsonmc.indicadores.indicadores;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-import cl.nelsonmc.indicadores.AdapterIndicadores;
+import cl.nelsonmc.indicadores.indicadores.AdapterIndicadores;
 import cl.nelsonmc.indicadores.R;
-import cl.nelsonmc.indicadores.modelos.SerieIndicador;
+import cl.nelsonmc.indicadores.model.SerieIndicador;
 
 public class ListaFragment extends Fragment {
 

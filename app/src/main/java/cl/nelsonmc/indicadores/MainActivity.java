@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,11 +21,17 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.List;
 import java.util.Objects;
-import cl.nelsonmc.indicadores.modelos.SerieIndicador;
+import cl.nelsonmc.indicadores.indicadores.IndicadorActivity;
+import cl.nelsonmc.indicadores.model.SerieIndicador;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private MainActivityModelView viewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
     private BottomSheetDialog bottomSheetDialog;
+    private AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -217,20 +224,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        actualizar();
-    }
-
-    private void actualizar(){
-        viewModel.requestDolarData();
-        viewModel.requestEuroData();
-        viewModel.requestUFData();
-        viewModel.requestIVPData();
-        viewModel.requestIPCData();
-        viewModel.requestUTMData();
-        viewModel.requestIMACECData();
-        viewModel.requestCobreData();
-        viewModel.requestDesempleoData();
-        viewModel.requestBitcoinData();
+        viewModel.actualizarValores();
     }
 
     private void setUpView(){
@@ -273,10 +267,19 @@ public class MainActivity extends AppCompatActivity {
         trendingDesempleo   = findViewById(R.id.trendingDesempleo);
         trendingBitcoin     = findViewById(R.id.trendingBitcoin);
 
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                actualizar();
+                viewModel.actualizarValores();
             }
         });
         darkModeVerification();
@@ -288,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
         if(json == null){
             return;
         }
-        Intent intent = new Intent(MainActivity.this,IndicadorActivity.class);
+        Intent intent = new Intent(MainActivity.this, IndicadorActivity.class);
         intent.putExtra("tipoData",(String) view.getTag());
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
     }
@@ -348,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void darkModeOpciones(){
-        String darkMode = PreferenceManager.getDefaultSharedPreferences(this).getString("dark_mode", "sistema");
+        String darkMode         = PreferenceManager.getDefaultSharedPreferences(this).getString("dark_mode", "sistema");
         RadioButton rb_claro    = bottomSheetDialog.findViewById(R.id.rb_claro);
         RadioButton rb_oscuro   = bottomSheetDialog.findViewById(R.id.rb_oscuro);
         RadioButton rb_sistema  = bottomSheetDialog.findViewById(R.id.rb_sistema);

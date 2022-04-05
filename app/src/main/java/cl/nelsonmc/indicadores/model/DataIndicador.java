@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.modelos;
+package cl.nelsonmc.indicadores.model;
 
 import java.util.ArrayList;
 

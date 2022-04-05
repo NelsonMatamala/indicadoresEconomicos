@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores;
+package cl.nelsonmc.indicadores.indicadores;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +14,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import cl.nelsonmc.indicadores.modelos.SerieIndicador;
+import cl.nelsonmc.indicadores.R;
+import cl.nelsonmc.indicadores.model.SerieIndicador;
 
 public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.ViewHolderIndicadores> {
     private ArrayList<SerieIndicador> indicadores;
@@ -73,8 +74,7 @@ public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.
             float numero = Float.parseFloat(valor);
             Locale chileLocale = new Locale("es","CL");
             NumberFormat nf = NumberFormat.getNumberInstance(chileLocale);
-            String valorFormateado = nf.format(numero);
-            return  valorFormateado;
+            return  nf.format(numero);
         }
 
         private String dateUtcToString(String fecha) {

@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.ui;
+package cl.nelsonmc.indicadores.indicadores;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,7 +20,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.text.NumberFormat;
 import java.util.Locale;
 import cl.nelsonmc.indicadores.R;
-import cl.nelsonmc.indicadores.modelos.SerieIndicador;
+import cl.nelsonmc.indicadores.model.SerieIndicador;
 
 public class CalcularFragment extends Fragment {
     private SerieIndicador serieIndicador;

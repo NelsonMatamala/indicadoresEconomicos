@@ -1,6 +1,6 @@
 package cl.nelsonmc.indicadores.webServices;
 
-import cl.nelsonmc.indicadores.modelos.DataIndicador;
+import cl.nelsonmc.indicadores.model.DataIndicador;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
