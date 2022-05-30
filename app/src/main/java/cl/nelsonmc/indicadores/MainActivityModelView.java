@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
-import cl.nelsonmc.indicadores.di.BaseApplication;
+
 import cl.nelsonmc.indicadores.model.DataIndicador;
 import cl.nelsonmc.indicadores.model.SerieIndicador;
 import cl.nelsonmc.indicadores.webServices.WebClient;
