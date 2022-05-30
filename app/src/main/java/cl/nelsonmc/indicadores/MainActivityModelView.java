@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,11 +33,12 @@ public class MainActivityModelView extends AndroidViewModel {
     @Inject
     WebClient client;
 
-    private MutableLiveData<List<SerieIndicador>> dolarList,euroList;
-    private MutableLiveData<List<SerieIndicador>> ufList,ivpList;
-    private MutableLiveData<List<SerieIndicador>> ipcList,utmList;
-    private MutableLiveData<List<SerieIndicador>> imacecList,cobreList;
-    private MutableLiveData<List<SerieIndicador>> desempleoList,bitcoinList;
+    private final MutableLiveData<List<SerieIndicador>> dolarList;
+    private final MutableLiveData<List<SerieIndicador>> euroList;
+    private final MutableLiveData<List<SerieIndicador>> ufList,ivpList;
+    private final MutableLiveData<List<SerieIndicador>> ipcList,utmList;
+    private final MutableLiveData<List<SerieIndicador>> imacecList,cobreList;
+    private final MutableLiveData<List<SerieIndicador>> desempleoList,bitcoinList;
 
     public MainActivityModelView(@NonNull Application application){
         super(application);
@@ -53,18 +55,18 @@ public class MainActivityModelView extends AndroidViewModel {
         bitcoinList     = new MutableLiveData<>();
     }
 
-    public MutableLiveData<List<SerieIndicador>> getDolarListObserver() {
+    public LiveData<List<SerieIndicador>> getDolarListObserver() {
         return dolarList;
     }
-    public MutableLiveData<List<SerieIndicador>> getEuroListObserver() { return euroList; }
-    public MutableLiveData<List<SerieIndicador>> getUFListObserver() { return ufList; }
-    public MutableLiveData<List<SerieIndicador>> getIVPListObserver() { return ivpList; }
-    public MutableLiveData<List<SerieIndicador>> getIPCListObserver() { return ipcList; }
-    public MutableLiveData<List<SerieIndicador>> getUTMListObserver() { return utmList; }
-    public MutableLiveData<List<SerieIndicador>> getIMACECListObserver() { return imacecList; }
-    public MutableLiveData<List<SerieIndicador>> getCobreListObserver() { return cobreList; }
-    public MutableLiveData<List<SerieIndicador>> getDesempleoListObserver() { return desempleoList; }
-    public MutableLiveData<List<SerieIndicador>> getBitcoinListObserver() { return bitcoinList; }
+    public LiveData<List<SerieIndicador>> getEuroListObserver() { return euroList; }
+    public LiveData<List<SerieIndicador>> getUFListObserver() { return ufList; }
+    public LiveData<List<SerieIndicador>> getIVPListObserver() { return ivpList; }
+    public LiveData<List<SerieIndicador>> getIPCListObserver() { return ipcList; }
+    public LiveData<List<SerieIndicador>> getUTMListObserver() { return utmList; }
+    public LiveData<List<SerieIndicador>> getIMACECListObserver() { return imacecList; }
+    public LiveData<List<SerieIndicador>> getCobreListObserver() { return cobreList; }
+    public LiveData<List<SerieIndicador>> getDesempleoListObserver() { return desempleoList; }
+    public LiveData<List<SerieIndicador>> getBitcoinListObserver() { return bitcoinList; }
 
     public void loadData(){
         String json;
@@ -120,7 +122,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     dolarList.postValue(response.body().getSerie());
                     saveData("dolar",response.body().getSerie());
                 }
@@ -139,7 +141,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     euroList.postValue(response.body().getSerie());
                     saveData("euro",response.body().getSerie());
                 }
@@ -158,7 +160,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     ufList.postValue(response.body().getSerie());
                     saveData("uf",response.body().getSerie());
                 }
@@ -177,7 +179,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     ivpList.postValue(response.body().getSerie());
                     saveData("ivp",response.body().getSerie());
                 }
@@ -196,7 +198,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     ipcList.postValue(response.body().getSerie());
                     saveData("ipc",response.body().getSerie());
                 }
@@ -215,7 +217,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     utmList.postValue(response.body().getSerie());
                     saveData("utm",response.body().getSerie());
                 }
@@ -234,7 +236,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     imacecList.postValue(response.body().getSerie());
                     saveData("imacec",response.body().getSerie());
                 }
@@ -253,7 +255,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     cobreList.postValue(response.body().getSerie());
                     saveData("cobre",response.body().getSerie());
                 }
@@ -272,7 +274,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     desempleoList.postValue(response.body().getSerie());
                     saveData("desempleo",response.body().getSerie());
                 }
@@ -291,7 +293,7 @@ public class MainActivityModelView extends AndroidViewModel {
         call.enqueue(new Callback<DataIndicador>() {
             @Override
             public void onResponse(Call<DataIndicador> call, Response<DataIndicador> response) {
-                if (response!=null && response.isSuccessful() && response.body()!=null){
+                if (response.isSuccessful() && response.body() != null){
                     bitcoinList.postValue(response.body().getSerie());
                     saveData("bitcoin",response.body().getSerie());
                 }
