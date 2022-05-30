@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.indicadores;
+package cl.nelsonmc.indicadores.indicadores.calculadora;
 
 import android.os.Bundle;
 import android.text.Editable;

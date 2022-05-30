@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.indicadores;
+package cl.nelsonmc.indicadores.indicadores.lista;
 
 import android.view.LayoutInflater;
 import android.view.View;
