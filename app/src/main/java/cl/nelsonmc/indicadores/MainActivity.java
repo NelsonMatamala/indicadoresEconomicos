@@ -1,9 +1,5 @@
 package cl.nelsonmc.indicadores;
 
-import static cl.nelsonmc.indicadores.UIModeOption.MODO_CLARO;
-import static cl.nelsonmc.indicadores.UIModeOption.MODO_OSCURO;
-import static cl.nelsonmc.indicadores.UIModeOption.PREDETERMINADO;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -34,10 +30,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.Objects;
 
+
+import cl.nelsonmc.indicadores.common.Constants;
 import cl.nelsonmc.indicadores.indicadores.IndicadorActivity;
 
 public class MainActivity extends AppCompatActivity {
-
     private TextView fechaDolarText, valorDolarText;
     private TextView fechaEuroTextView, valorEuroText;
     private TextView fechaUFTextView, valorUFText;
@@ -276,19 +273,19 @@ public class MainActivity extends AppCompatActivity {
                 radioGroup.setOnCheckedChangeListener((radioGroup1, checkedId) -> {
                     switch (checkedId) {
                         case R.id.rb_claro:
-                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", MODO_CLARO.toString()).apply();
+                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", Constants.LIGHTMODE).apply();
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                             bottomSheetDialog.dismiss();
                             break;
 
                         case R.id.rb_oscuro:
-                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", MODO_OSCURO.toString()).apply();
+                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", Constants.DARKMODE).apply();
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                             bottomSheetDialog.dismiss();
                             break;
 
                         case R.id.rb_sistema:
-                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", PREDETERMINADO.toString()).apply();
+                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", Constants.PREDETERMINADO).apply();
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                             bottomSheetDialog.dismiss();
                             break;
@@ -302,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void uiModeOptions() {
-        String modeOptionString = PreferenceManager.getDefaultSharedPreferences(this).getString("option_mode", PREDETERMINADO.toString());
+        String modeOptionString = PreferenceManager.getDefaultSharedPreferences(this).getString("option_mode", Constants.PREDETERMINADO);
         RadioButton rb_claro = bottomSheetDialog.findViewById(R.id.rb_claro);
         RadioButton rb_oscuro = bottomSheetDialog.findViewById(R.id.rb_oscuro);
         RadioButton rb_sistema = bottomSheetDialog.findViewById(R.id.rb_sistema);
@@ -310,15 +307,15 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < 29) {
             rb_sistema.setVisibility(View.GONE);
         }
-        UIModeOption modeOption = UIModeOption.valueOf(modeOptionString);
-        switch (modeOption) {
-            case MODO_OSCURO:
+
+        switch (modeOptionString) {
+            case Constants.DARKMODE:
                 rb_oscuro.setChecked(true);
                 break;
-            case MODO_CLARO:
+            case Constants.LIGHTMODE:
                 rb_claro.setChecked(true);
                 break;
-            case PREDETERMINADO:
+            case Constants.PREDETERMINADO:
                 rb_sistema.setChecked(true);
         }
     }

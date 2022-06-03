@@ -1,9 +1,5 @@
 package cl.nelsonmc.indicadores;
 
-import static cl.nelsonmc.indicadores.UIModeOption.MODO_CLARO;
-import static cl.nelsonmc.indicadores.UIModeOption.MODO_OSCURO;
-import static cl.nelsonmc.indicadores.UIModeOption.PREDETERMINADO;
-
 import android.app.Application;
 import android.preference.PreferenceManager;
 
@@ -11,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
+import cl.nelsonmc.indicadores.common.Constants;
 import cl.nelsonmc.indicadores.di.DaggerRetrofitComponent;
 import cl.nelsonmc.indicadores.di.RetrofitComponent;
 import cl.nelsonmc.indicadores.di.RetrofitModule;
@@ -32,11 +29,10 @@ public class BaseApplication extends Application {
     }
 
     private void uiModeVerification() {
-        String modeOptionString = PreferenceManager.getDefaultSharedPreferences(this).getString("option_mode", PREDETERMINADO.toString());
-        UIModeOption modeOption = UIModeOption.valueOf(modeOptionString);
-        if (modeOption == MODO_OSCURO) {
+        String modeOptionString = PreferenceManager.getDefaultSharedPreferences(this).getString("option_mode", Constants.PREDETERMINADO);
+        if (modeOptionString.equals(Constants.DARKMODE)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else if (modeOption == MODO_CLARO) {
+        } else if (modeOptionString.equals(Constants.LIGHTMODE)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
