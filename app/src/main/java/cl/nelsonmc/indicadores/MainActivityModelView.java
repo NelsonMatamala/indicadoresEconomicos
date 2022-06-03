@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import cl.nelsonmc.indicadores.model.DataIndicador;
 import cl.nelsonmc.indicadores.model.SerieIndicador;
+import cl.nelsonmc.indicadores.repository.MainRepository;
 import cl.nelsonmc.indicadores.webServices.WebClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,8 +33,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainActivityModelView extends AndroidViewModel {
     @Inject
     WebClient client;
-
-    private final MutableLiveData<List<SerieIndicador>> dolarList;
+    private final String TAG = "MainActivityModelView";
+    private final MainRepository repository;
+    //private final MutableLiveData<List<SerieIndicador>> dolarList;
     private final MutableLiveData<List<SerieIndicador>> euroList;
     private final MutableLiveData<List<SerieIndicador>> ufList,ivpList;
     private final MutableLiveData<List<SerieIndicador>> ipcList,utmList;
@@ -43,7 +45,8 @@ public class MainActivityModelView extends AndroidViewModel {
     public MainActivityModelView(@NonNull Application application){
         super(application);
         ((BaseApplication)getApplication()).getRetrofitComponent().inject(this);
-        dolarList       = new MutableLiveData<>();
+        this.repository = new MainRepository(client);
+       // dolarList       = new MutableLiveData<>();
         euroList        = new MutableLiveData<>();
         ufList          = new MutableLiveData<>();
         ivpList         = new MutableLiveData<>();
@@ -56,7 +59,7 @@ public class MainActivityModelView extends AndroidViewModel {
     }
 
     public LiveData<List<SerieIndicador>> getDolarListObserver() {
-        return dolarList;
+        return repository.getDolarData();
     }
     public LiveData<List<SerieIndicador>> getEuroListObserver() { return euroList; }
     public LiveData<List<SerieIndicador>> getUFListObserver() { return ufList; }
@@ -74,7 +77,7 @@ public class MainActivityModelView extends AndroidViewModel {
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<SerieIndicador>>() {}.getType();
         json = sharedPreferences.getString("dolar", null);
-        dolarList.postValue(gson.fromJson(json, type));
+        //dolarList.postValue(gson.fromJson(json, type));
         json = sharedPreferences.getString("euro", null);
         euroList.postValue(gson.fromJson(json, type));
         json = sharedPreferences.getString("uf", null);
@@ -118,6 +121,9 @@ public class MainActivityModelView extends AndroidViewModel {
     }
 
     private void requestDolarData() {
+        //remoteRepository.getDolarData();
+       // dolarList.postValue(remoteRepository.getDolarData().getValue());
+        /*
         Call<DataIndicador> call = client.getDataDolar();
         call.enqueue(new Callback<DataIndicador>() {
             @Override
@@ -134,6 +140,8 @@ public class MainActivityModelView extends AndroidViewModel {
                 dolarList.postValue(null);
             }
         });
+
+         */
     }
 
     private void requestEuroData(){
@@ -306,6 +314,7 @@ public class MainActivityModelView extends AndroidViewModel {
             }
         });
     }
+
 
     public String decimalFormat(String valor){
         float numero = Float.parseFloat(valor);
