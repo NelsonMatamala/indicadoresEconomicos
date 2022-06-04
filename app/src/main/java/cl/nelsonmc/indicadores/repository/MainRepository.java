@@ -58,6 +58,7 @@ public class MainRepository {
         getIMACECData();
         getCobreData();
         getDesempleoData();
+        getBitcoinData();
     }
 
     public void clearDisposable() {
