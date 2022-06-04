@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.di;
+package cl.nelsonmc.indicadores.repository.retrofitdi;
 
 import javax.inject.Singleton;
 import cl.nelsonmc.indicadores.MainActivityModelView;

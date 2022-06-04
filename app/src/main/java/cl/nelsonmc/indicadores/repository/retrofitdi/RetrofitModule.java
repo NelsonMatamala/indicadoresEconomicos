@@ -1,10 +1,10 @@
-package cl.nelsonmc.indicadores.di;
+package cl.nelsonmc.indicadores.repository.retrofitdi;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
-import cl.nelsonmc.indicadores.repository.RepositoryData;
+import cl.nelsonmc.indicadores.repository.RemoteData;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -50,7 +50,7 @@ public class RetrofitModule {
 
     @Singleton
     @Provides
-    RepositoryData provideWebClient(Retrofit retrofit){
-        return retrofit.create(RepositoryData.class);
+    RemoteData provideWebClient(Retrofit retrofit){
+        return retrofit.create(RemoteData.class);
     }
 }
