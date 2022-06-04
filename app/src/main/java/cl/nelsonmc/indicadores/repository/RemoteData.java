@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.webServices;
+package cl.nelsonmc.indicadores.repository;
 
 import cl.nelsonmc.indicadores.model.DataIndicador;
 import cl.nelsonmc.indicadores.model.SerieIndicador;
@@ -6,7 +6,7 @@ import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 
-public interface WebClient {
+public interface RepositoryData {
     @GET("api/dolar")
     Observable<DataIndicador> getDataDolarObs();
 

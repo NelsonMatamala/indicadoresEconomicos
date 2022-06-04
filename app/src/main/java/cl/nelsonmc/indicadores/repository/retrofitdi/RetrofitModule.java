@@ -3,7 +3,8 @@ package cl.nelsonmc.indicadores.di;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
-import cl.nelsonmc.indicadores.webServices.WebClient;
+
+import cl.nelsonmc.indicadores.repository.RepositoryData;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -49,7 +50,7 @@ public class RetrofitModule {
 
     @Singleton
     @Provides
-    WebClient provideWebClient(Retrofit retrofit){
-        return retrofit.create(WebClient.class);
+    RepositoryData provideWebClient(Retrofit retrofit){
+        return retrofit.create(RepositoryData.class);
     }
 }
