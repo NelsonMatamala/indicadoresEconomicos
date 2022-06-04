@@ -1,5 +1,7 @@
 package cl.nelsonmc.indicadores.indicadores;
 
+import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -41,9 +43,9 @@ public class IndicadorActivity extends AppCompatActivity {
         Bundle extras   = getIntent().getExtras();
         tipoData        = extras != null ? extras.getString("tipoData") : "";
         tittle.setText(tipoData.toUpperCase());
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+
         Gson gson = new Gson();
-        String json = sharedPreferences.getString(tipoData, null);
+        String json = sharedPreferences.getDataByName(tipoData);
         Type type = new TypeToken<ArrayList<SerieIndicador>>() {}.getType();
         serieIndicadorArrayList = gson.fromJson(json, type);
 
