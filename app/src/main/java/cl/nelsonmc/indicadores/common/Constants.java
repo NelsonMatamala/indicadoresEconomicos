@@ -8,7 +8,6 @@ public class Constants {
 
     //SharedPreferences
     public static final String MODE_UI = "optionMode";
-    public static final String DATA_INDICADORES = "dataIndicadores";
 
     //Indicadores
     public static final String DOLAR = "dolar";
