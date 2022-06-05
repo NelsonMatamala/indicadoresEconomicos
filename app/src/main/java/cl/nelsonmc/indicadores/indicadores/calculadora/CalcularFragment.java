@@ -26,6 +26,7 @@ public class CalcularFragment extends Fragment {
     private TextView textViewUp;
     private TextView textViewDown;
     private Utils utils;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,7 @@ public class CalcularFragment extends Fragment {
         editTextNumber = view.findViewById(R.id.editTextIndicador);
         textViewUp.setText(tipoData.toUpperCase());
         textViewUp.setTag(tipoData.toUpperCase());
-        textUltimaFecha.setText(dateUtcToString(serieIndicador.getFecha()));
+        textUltimaFecha.setText(utils.dateUtcToString(serieIndicador.getFecha()));
         editTextValorCalculo = view.findViewById(R.id.editTextCalculo);
 
         if (tipoData.equals("bitcoin")) {
@@ -85,7 +86,7 @@ public class CalcularFragment extends Fragment {
             String valor2 = (String) textViewDown.getText();
             textViewUp.setText(valor2);
             textViewDown.setText(valor1);
-            if(!editTextNumber.getText().toString().isEmpty()){
+            if (!editTextNumber.getText().toString().isEmpty()) {
                 calculateAndSetValue();
             }
         });
@@ -101,14 +102,7 @@ public class CalcularFragment extends Fragment {
         } else {
             multiplicacion = valor / indicadorValor;
         }
-        editTextValorCalculo.setText(decimalFormat(multiplicacion));
+        editTextValorCalculo.setText(utils.decimalFormat(multiplicacion));
     }
 
-    private String decimalFormat(float valor) {
-        return utils.decimalFormat(valor);
-    }
-
-    public String dateUtcToString(String fecha) {
-        return utils.dateUtcToString(fecha);
-    }
 }
