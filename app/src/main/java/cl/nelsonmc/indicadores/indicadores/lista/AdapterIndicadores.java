@@ -6,24 +6,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import org.threeten.bp.Instant;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import cl.nelsonmc.indicadores.R;
+import cl.nelsonmc.indicadores.common.Utils;
 import cl.nelsonmc.indicadores.model.SerieIndicador;
 
 public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.ViewHolderIndicadores> {
-    private ArrayList<SerieIndicador> indicadores;
-    private String tipoData;
+    private final ArrayList<SerieIndicador> indicadores;
+    private final String tipoData;
+    private final Utils utils;
 
     public AdapterIndicadores(ArrayList<SerieIndicador> indicadores,String tipoData) {
         this.indicadores = indicadores;
         this.tipoData = tipoData;
+        this.utils = new Utils();
     }
 
     @NonNull
@@ -66,23 +63,9 @@ public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.
                 tipoValor.setText("$US");
             }
 
-            fechaText.setText(dateUtcToString(indicadorModel.getFecha()));
-            valorText.setText(decimalFormat(indicadorModel.getValor()));
+            fechaText.setText(utils.dateUtcToString(indicadorModel.getFecha()));
+            valorText.setText(utils.decimalFormat(indicadorModel.getValor()));
         }
-
-        private String decimalFormat(String valor){
-            float numero = Float.parseFloat(valor);
-            Locale chileLocale = new Locale("es","CL");
-            NumberFormat nf = NumberFormat.getNumberInstance(chileLocale);
-            return  nf.format(numero);
-        }
-
-        private String dateUtcToString(String fecha) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            Instant instantFecha  = Instant.parse(fecha);
-            return ZonedDateTime.ofInstant(instantFecha, ZoneId.of("America/Santiago")).format(dtf);
-        }
-
 
     }
 }
