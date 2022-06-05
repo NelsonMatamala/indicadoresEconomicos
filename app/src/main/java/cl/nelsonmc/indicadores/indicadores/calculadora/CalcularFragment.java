@@ -15,14 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import org.threeten.bp.Instant;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-
-import java.text.NumberFormat;
-import java.util.Locale;
-
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.common.Utils;
 import cl.nelsonmc.indicadores.model.SerieIndicador;
