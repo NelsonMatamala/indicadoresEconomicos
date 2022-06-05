@@ -5,7 +5,6 @@ import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -30,7 +29,6 @@ public class IndicadorActivity extends AppCompatActivity {
 
     private ArrayList<SerieIndicador> serieIndicadorArrayList;
     private String tipoData;
-    private LineChart lineChart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +62,7 @@ public class IndicadorActivity extends AppCompatActivity {
     }
 
     private void createGraph(){
-        lineChart = findViewById(R.id.reportingChart);
+        LineChart lineChart = findViewById(R.id.reportingChart);
         lineChart.setTouchEnabled(true);
         lineChart.setPinchZoom(true);
         lineChart.getAxisRight().setEnabled(false);
@@ -96,7 +94,7 @@ public class IndicadorActivity extends AppCompatActivity {
     }
 
     private ArrayList<Entry> valoresIndicador(){
-        ArrayList<Entry> dataVals = new ArrayList<Entry>();
+        ArrayList<Entry> dataVals = new ArrayList<>();
         int arraySize = serieIndicadorArrayList.size();
         for (int i = 0;i < arraySize;i++){
             float valor = Float.parseFloat(serieIndicadorArrayList.get(arraySize - i -1).getValor());
