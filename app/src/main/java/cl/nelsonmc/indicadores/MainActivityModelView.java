@@ -7,19 +7,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-
-import org.threeten.bp.Instant;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
-
+import cl.nelsonmc.indicadores.common.Utils;
 import cl.nelsonmc.indicadores.model.SerieIndicador;
 import cl.nelsonmc.indicadores.repository.MainRepository;
 import cl.nelsonmc.indicadores.repository.RemoteData;
@@ -28,11 +20,13 @@ public class MainActivityModelView extends AndroidViewModel {
     @Inject
     RemoteData client;
     private final MainRepository repository;
+    private final Utils utils;
 
     public MainActivityModelView(@NonNull Application application) {
         super(application);
         ((BaseApplication) getApplication()).getRetrofitComponent().inject(this);
         repository = new MainRepository(client);
+        utils = new Utils();
     }
 
     public LiveData<List<SerieIndicador>> getDolarListObserver() {
@@ -88,20 +82,15 @@ public class MainActivityModelView extends AndroidViewModel {
         repository.getBitcoinData();
     }
 
-    public void clearDisposable(){
+    public void clearDisposable() {
         repository.clearDisposable();
     }
 
     public String decimalFormat(String valor) {
-        float numero = Float.parseFloat(valor);
-        Locale chileLocale = new Locale("es", "CL");
-        NumberFormat nf = NumberFormat.getNumberInstance(chileLocale);
-        return nf.format(numero);
+        return utils.decimalFormat(valor);
     }
 
     public String dateUtcToString(String fecha) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        Instant instantFecha = Instant.parse(fecha);
-        return ZonedDateTime.ofInstant(instantFecha, ZoneId.of("America/Santiago")).format(dtf);
+        return utils.dateUtcToString(fecha);
     }
 }

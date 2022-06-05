@@ -24,6 +24,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import cl.nelsonmc.indicadores.R;
+import cl.nelsonmc.indicadores.common.Utils;
 import cl.nelsonmc.indicadores.model.SerieIndicador;
 
 public class CalcularFragment extends Fragment {
@@ -32,13 +33,14 @@ public class CalcularFragment extends Fragment {
     private EditText editTextNumber, editTextValorCalculo;
     private TextView textViewUp;
     private TextView textViewDown;
-
+    private Utils utils;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             serieIndicador = (SerieIndicador) getArguments().getSerializable("indicador");
             tipoData = getArguments().getString("tipoData");
+            utils = new Utils();
         }
     }
 
@@ -111,14 +113,10 @@ public class CalcularFragment extends Fragment {
     }
 
     private String decimalFormat(float valor) {
-        Locale chileLocale = new Locale("es", "CL");
-        NumberFormat nf = NumberFormat.getNumberInstance(chileLocale);
-        return nf.format(valor);
+        return utils.decimalFormat(valor);
     }
 
     public String dateUtcToString(String fecha) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        Instant instantFecha = Instant.parse(fecha);
-        return ZonedDateTime.ofInstant(instantFecha, ZoneId.of("America/Santiago")).format(dtf);
+        return utils.dateUtcToString(fecha);
     }
 }
