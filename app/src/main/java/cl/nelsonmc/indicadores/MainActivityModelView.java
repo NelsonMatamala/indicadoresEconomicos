@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
@@ -33,11 +32,11 @@ public class MainActivityModelView extends AndroidViewModel {
         return repository.dolar;
     }
 
-    public MutableLiveData<List<SerieIndicador>> getEuroListObserver() {
+    public LiveData<List<SerieIndicador>> getEuroListObserver() {
         return repository.euro;
     }
 
-    public MutableLiveData<List<SerieIndicador>> getUFListObserver() {
+    public LiveData<List<SerieIndicador>> getUFListObserver() {
         return repository.uf;
     }
 
@@ -80,6 +79,12 @@ public class MainActivityModelView extends AndroidViewModel {
         repository.getCobreData();
         repository.getDesempleoData();
         repository.getBitcoinData();
+    }
+
+    public Boolean checkValueDecreased(String valueToday,String valueYesterday){
+        float valorHoy = Float.parseFloat(valueToday);
+        float valorAyer = Float.parseFloat(valueYesterday);
+        return valorHoy < valorAyer;
     }
 
     public void clearDisposable() {
