@@ -1,26 +1,27 @@
 package cl.nelsonmc.indicadores;
 
+import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
+import static cl.nelsonmc.indicadores.common.Constants.DARKMODE;
+import static cl.nelsonmc.indicadores.common.Constants.LIGHTMODE;
+import static cl.nelsonmc.indicadores.common.Constants.MODE_UI;
+import static cl.nelsonmc.indicadores.common.Constants.PREDETERMINADO;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -31,210 +32,142 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.Objects;
 
 
-import cl.nelsonmc.indicadores.common.Constants;
+import cl.nelsonmc.indicadores.databinding.ActivityMainBinding;
 import cl.nelsonmc.indicadores.indicadores.IndicadorActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView fechaDolarText, valorDolarText;
-    private TextView fechaEuroTextView, valorEuroText;
-    private TextView fechaUFTextView, valorUFText;
-    private TextView fechaIVPTextView, valorIVPText;
-    private TextView fechaIPCTextView, valorIPCText;
-    private TextView fechaUTMTextView, valorUTMText;
-    private TextView fechaIMACECTextView, valorIMACECText;
-    private TextView fechaCobreTextView, valorCobreText;
-    private TextView fechaDesempleoText, valorDesempleoText;
-    private TextView fechaBitcoinText, valorBitcoinText;
-    private ImageView trendingDolar, trendingEuro, trendingUF;
-    private ImageView trendingIVP, trendingIPC, trendingUTM, trendingIMACEC;
-    private ImageView trendingCobre, trendingDesempleo, trendingBitcoin;
     private MainActivityModelView viewModel;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private BottomSheetDialog bottomSheetDialog;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setUpView();
 
         viewModel = new ViewModelProvider(this).get(MainActivityModelView.class);
 
-        viewModel.loadData();
-
         viewModel.getDolarListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaDolarText.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorDolarText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingDolar.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
-                }
+                binding.nScroll.fechaDolarTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorDolarTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingDolar.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));}
             }
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getEuroListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaEuroTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorEuroText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingEuro.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
-                }
+                binding.nScroll.fechaEuroTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorEuroTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingEuro.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));}
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getUFListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaUFTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorUFText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingUF.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
+                binding.nScroll.fechaUFTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorUFTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingUF.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getIVPListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaIVPTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorIVPText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingIVP.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
+                binding.nScroll.fechaIVPTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorIVPTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingIVP.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getIPCListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaIPCTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorIPCText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingIPC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
+                binding.nScroll.fechaIPCTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorIPCTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingIPC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getUTMListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaUTMTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorUTMText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingUTM.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
+                binding.nScroll.fechaUTMTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorUTMTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingUTM.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getIMACECListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaIMACECTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorIMACECText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingIMACEC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
+                binding.nScroll.fechaIMACECTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorIMACECTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingIMACEC.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getCobreListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaCobreTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorCobreText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingCobre.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
+                binding.nScroll.fechaCobreTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorCobreTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingCobre.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getDesempleoListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaDesempleoText.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorDesempleoText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingDesempleo.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
+                binding.nScroll.fechaDesempleoTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorDesempleoTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingDesempleo.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
         viewModel.getBitcoinListObserver().observe(this, serieIndicador -> {
             if (serieIndicador != null) {
-                fechaBitcoinText.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
-                valorBitcoinText.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
-                float valorHoy = Float.parseFloat(serieIndicador.get(0).getValor());
-                float valorAyer = Float.parseFloat(serieIndicador.get(1).getValor());
-                if (valorHoy < valorAyer) {
-                    trendingBitcoin.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
+                binding.nScroll.fechaBitcoinTextView.setText(viewModel.dateUtcToString(serieIndicador.get(0).getFecha()));
+                binding.nScroll.valorBitcoinTextView.setText(viewModel.decimalFormat(serieIndicador.get(0).getValor()));
+                if(viewModel.checkValueDecreased(serieIndicador.get(0).getValor(),serieIndicador.get(1).getValor())){
+                    binding.nScroll.trendingBitcoin.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, R.drawable.ic_trending_down));
                 }
             }
-            swipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefresh.setRefreshing(false);
         });
 
-        viewModel.actualizarValores();
     }
 
     private void setUpView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        CollapsingToolbarLayout coll_toolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        CollapsingToolbarLayout coll_toolbar = findViewById(R.id.collapsing_toolbar_layout);
         coll_toolbar.setTitle("Indicadores");
         coll_toolbar.setCollapsedTitleTextAppearance(R.style.coll_toolbar_title);
         coll_toolbar.setExpandedTitleTextAppearance(R.style.exp_toolbar_title);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
-        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
-        fechaDolarText = findViewById(R.id.fechaDolarTextView);
-        valorDolarText = findViewById(R.id.valorDolarTextView);
-        fechaEuroTextView = findViewById(R.id.fechaEuroTextView);
-        valorEuroText = findViewById(R.id.valorEuroTextView);
-        fechaUFTextView = findViewById(R.id.fechaUFTextView);
-        valorUFText = findViewById(R.id.valorUFTextView);
-        fechaIVPTextView = findViewById(R.id.fechaIVPTextView);
-        valorIVPText = findViewById(R.id.valorIVPTextView);
-        fechaIPCTextView = findViewById(R.id.fechaIPCTextView);
-        valorIPCText = findViewById(R.id.valorIPCTextView);
-        fechaUTMTextView = findViewById(R.id.fechaUTMTextView);
-        valorUTMText = findViewById(R.id.valorUTMTextView);
-        fechaIMACECTextView = findViewById(R.id.fechaIMACECTextView);
-        valorIMACECText = findViewById(R.id.valorIMACECTextView);
-        fechaCobreTextView = findViewById(R.id.fechaCobreTextView);
-        valorCobreText = findViewById(R.id.valorCobreTextView);
-        fechaDesempleoText = findViewById(R.id.fechaDesempleoTextView);
-        valorDesempleoText = findViewById(R.id.valorDesempleoTextView);
-        fechaBitcoinText = findViewById(R.id.fechaBitcoinTextView);
-        valorBitcoinText = findViewById(R.id.valorBitcoinTextView);
-        trendingDolar = findViewById(R.id.trendingDolar);
-        trendingEuro = findViewById(R.id.trendingEuro);
-        trendingUF = findViewById(R.id.trendingUF);
-        trendingIVP = findViewById(R.id.trendingIVP);
-        trendingIPC = findViewById(R.id.trendingIPC);
-        trendingUTM = findViewById(R.id.trendingUTM);
-        trendingIMACEC = findViewById(R.id.trendingIMACEC);
-        trendingCobre = findViewById(R.id.trendingCobre);
-        trendingDesempleo = findViewById(R.id.trendingDesempleo);
-        trendingBitcoin = findViewById(R.id.trendingBitcoin);
 
         MobileAds.initialize(this, initializationStatus -> {
         });
@@ -242,13 +175,12 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> viewModel.actualizarValores());
+        binding.swipeRefresh.setOnRefreshListener(() -> viewModel.actualizarValores());
     }
 
     public void goToIndicador(View view) {
-        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
-        String json = sharedPreferences.getString((String) view.getTag(), null);
-        if (json == null) {
+        String json = sharedPreferences.getDataByName((String) view.getTag());
+        if (json == null || json.isEmpty()) {
             return;
         }
         Intent intent = new Intent(MainActivity.this, IndicadorActivity.class);
@@ -273,19 +205,19 @@ public class MainActivity extends AppCompatActivity {
                 radioGroup.setOnCheckedChangeListener((radioGroup1, checkedId) -> {
                     switch (checkedId) {
                         case R.id.rb_claro:
-                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", Constants.LIGHTMODE).apply();
+                            sharedPreferences.setUIMode(LIGHTMODE);
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                             bottomSheetDialog.dismiss();
                             break;
 
                         case R.id.rb_oscuro:
-                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", Constants.DARKMODE).apply();
+                            sharedPreferences.setUIMode(DARKMODE);
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                             bottomSheetDialog.dismiss();
                             break;
 
                         case R.id.rb_sistema:
-                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit().putString("option_mode", Constants.PREDETERMINADO).apply();
+                            sharedPreferences.setUIMode(PREDETERMINADO);
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                             bottomSheetDialog.dismiss();
                             break;
@@ -299,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void uiModeOptions() {
-        String modeOptionString = PreferenceManager.getDefaultSharedPreferences(this).getString("option_mode", Constants.PREDETERMINADO);
+        String modeOptionString = sharedPreferences.getDataByName(MODE_UI);
         RadioButton rb_claro = bottomSheetDialog.findViewById(R.id.rb_claro);
         RadioButton rb_oscuro = bottomSheetDialog.findViewById(R.id.rb_oscuro);
         RadioButton rb_sistema = bottomSheetDialog.findViewById(R.id.rb_sistema);
@@ -309,15 +241,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         switch (modeOptionString) {
-            case Constants.DARKMODE:
+            case DARKMODE:
                 rb_oscuro.setChecked(true);
                 break;
-            case Constants.LIGHTMODE:
+            case LIGHTMODE:
                 rb_claro.setChecked(true);
                 break;
-            case Constants.PREDETERMINADO:
+            case PREDETERMINADO:
                 rb_sistema.setChecked(true);
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewModel.clearDisposable();
+    }
 }
