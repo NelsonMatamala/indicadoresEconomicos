@@ -1,4 +1,4 @@
-# indicadoresEconomicos
+# Indicadores Ecónomicos Chile
 Proyecto que consume los datos financieros otorgados por la api “https://mindicador.cl/api”
 
 
