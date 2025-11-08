@@ -109,27 +109,24 @@ public class IndicadorActivity extends AppCompatActivity {
 
             Fragment selectedFragment;
             Bundle datos;
+            int id = menuItem.getItemId();
 
-            switch (menuItem.getItemId()){
+            if (id == R.id.calcular) {
+                datos = new Bundle();
+                datos.putString("tipoData", tipoData);
+                datos.putSerializable("indicador", serieIndicadorArrayList.get(0));
+                selectedFragment = new CalcularFragment();
+                selectedFragment.setArguments(datos);
 
-                case R.id.calcular:
-                    datos = new Bundle();
-                    datos.putString("tipoData",tipoData);
-                    datos.putSerializable("indicador",serieIndicadorArrayList.get(0));
-                    selectedFragment = new CalcularFragment();
-                    selectedFragment.setArguments(datos);
-                    break;
+            } else if (id == R.id.lista) {
+                datos = new Bundle();
+                datos.putSerializable("arrayList", serieIndicadorArrayList);
+                datos.putString("tipoData", tipoData);
+                selectedFragment = new ListaFragment();
+                selectedFragment.setArguments(datos);
 
-                case R.id.lista:
-                    datos = new Bundle();
-                    datos.putSerializable("arrayList",serieIndicadorArrayList);
-                    datos.putString("tipoData",tipoData);
-                    selectedFragment = new ListaFragment();
-                    selectedFragment.setArguments(datos);
-                    break;
-
-                default:
-                    selectedFragment = new CalcularFragment();
+            } else {
+                selectedFragment = new CalcularFragment();
             }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();

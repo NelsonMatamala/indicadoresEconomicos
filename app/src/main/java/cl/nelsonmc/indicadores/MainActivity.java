@@ -203,24 +203,20 @@ public class MainActivity extends AppCompatActivity {
             RadioGroup radioGroup = bottomSheetDialog.findViewById(R.id.radio_group);
             if (radioGroup != null) {
                 radioGroup.setOnCheckedChangeListener((radioGroup1, checkedId) -> {
-                    switch (checkedId) {
-                        case R.id.rb_claro:
-                            sharedPreferences.setUIMode(LIGHTMODE);
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                            bottomSheetDialog.dismiss();
-                            break;
+                    if (checkedId == R.id.rb_claro) {
+                        sharedPreferences.setUIMode(LIGHTMODE);
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        bottomSheetDialog.dismiss();
 
-                        case R.id.rb_oscuro:
-                            sharedPreferences.setUIMode(DARKMODE);
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                            bottomSheetDialog.dismiss();
-                            break;
+                    } else if (checkedId == R.id.rb_oscuro) {
+                        sharedPreferences.setUIMode(DARKMODE);
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        bottomSheetDialog.dismiss();
 
-                        case R.id.rb_sistema:
-                            sharedPreferences.setUIMode(PREDETERMINADO);
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                            bottomSheetDialog.dismiss();
-                            break;
+                    } else if (checkedId == R.id.rb_sistema) {
+                        sharedPreferences.setUIMode(PREDETERMINADO);
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                        bottomSheetDialog.dismiss();
                     }
                 });
             }
