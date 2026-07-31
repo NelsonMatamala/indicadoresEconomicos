@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
+def adMobProps = new Properties()
+def adMobPropsFile = rootProject.file("local.properties")
+if (adMobPropsFile.exists()) {
+    adMobPropsFile.withInputStream { adMobProps.load(it) }
+}
+
+def adMobAppId = adMobProps.getProperty("ADMOB_APP_ID", "ca-app-pub-3940256099942544~3347511713")
+def adMobBannerId = adMobProps.getProperty("ADMOB_BANNER_ID", "ca-app-pub-3940256099942544/6300978111")
+
 android {
     namespace "cl.nelsonmc.indicadores"
     compileSdk 35
@@ -13,6 +22,9 @@ android {
         versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [ADMOB_APP_ID: adMobAppId]
+        resValue "string", "admob_banner_id", adMobBannerId
     }
 
     compileOptions {
