@@ -1,14 +1,22 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
-def adMobProps = new Properties()
-def adMobPropsFile = rootProject.file("local.properties")
-if (adMobPropsFile.exists()) {
-    adMobPropsFile.withInputStream { adMobProps.load(it) }
+def localProps = new Properties()
+def localPropsFile = rootProject.file("local.properties")
+if (localPropsFile.exists()) {
+    localPropsFile.withInputStream { localProps.load(it) }
 }
 
-def adMobAppId = adMobProps.getProperty("ADMOB_APP_ID", "ca-app-pub-3940256099942544~3347511713")
-def adMobBannerId = adMobProps.getProperty("ADMOB_BANNER_ID", "ca-app-pub-3940256099942544/6300978111")
+def adMobAppId = localProps.getProperty("ADMOB_APP_ID", "ca-app-pub-3940256099942544~3347511713")
+def adMobBannerId = localProps.getProperty("ADMOB_BANNER_ID", "ca-app-pub-3940256099942544/6300978111")
+
+def adMobTestAppId = "ca-app-pub-3940256099942544~3347511713"
+def adMobTestBannerId = "ca-app-pub-3940256099942544/6300978111"
+
+def keystorePath = localProps.getProperty("KEYSTORE_PATH", "")
+def keystorePassword = localProps.getProperty("KEYSTORE_PASSWORD", "")
+def keystoreAlias = localProps.getProperty("KEY_ALIAS", "")
+def keystoreKeyPassword = localProps.getProperty("KEY_PASSWORD", "")
 
 android {
     namespace "cl.nelsonmc.indicadores"
@@ -23,8 +31,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders = [ADMOB_APP_ID: adMobAppId]
-        resValue "string", "admob_banner_id", adMobBannerId
+        manifestPlaceholders = [ADMOB_APP_ID: adMobTestAppId]
+        resValue "string", "admob_banner_id", adMobTestBannerId
     }
 
     compileOptions {
@@ -32,10 +40,30 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    signingConfigs {
+        release {
+            if (keystorePath && keystorePassword && keystoreAlias && keystoreKeyPassword) {
+                def keystoreFile = new File(keystorePath)
+                if (!keystoreFile.exists()) {
+                    throw new GradleException("STORE_FILE no existe: ${keystorePath}. Verifica local.properties")
+                }
+                storeFile keystoreFile
+                storePassword keystorePassword
+                keyAlias keystoreAlias
+                keyPassword keystoreKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (keystorePath && keystorePassword && keystoreAlias && keystoreKeyPassword) {
+                signingConfig signingConfigs.release
+            }
+            manifestPlaceholders = [ADMOB_APP_ID: adMobAppId]
+            resValue "string", "admob_banner_id", adMobBannerId
         }
     }
 
