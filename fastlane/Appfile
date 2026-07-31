@@ -1,0 +1,10 @@
+props = {}
+File.foreach(File.expand_path("../local.properties", __dir__)) do |line|
+  line = line.strip
+  next if line.empty? || line.start_with?("#") || !line.include?("=")
+  k, v = line.split("=", 2)
+  props[k.strip] = v.strip
+end
+
+json_key_file(props["PLAY_STORE_JSON_KEY"])
+package_name("cl.nelsonmc.indicadores")

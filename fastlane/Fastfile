@@ -1,0 +1,102 @@
+require 'fileutils'
+
+default_platform(:android)
+
+# Convierte un versionCode en versionName siguiendo la convención actual (4 -> "1.3")
+def version_name_from_code(version_code)
+  "1.#{version_code - 1}"
+end
+
+# Lee las notas de versión (changelog) de la versión activa anterior en producción
+def fetch_previous_release_notes(previous_version_code)
+  require 'supply'
+
+  client = Supply::Client.make_from_config
+  client.begin_edit(package_name: Supply.config[:package_name])
+
+  track = client.get_edit_track('production')
+  release = track&.releases&.find do |r|
+    r.version_codes.map(&:to_i).include?(previous_version_code)
+  end
+
+  client.abort_current_edit
+
+  return {} unless release
+
+  notes = {}
+  (release.release_notes || []).each do |note|
+    notes[note.language] = note.text
+  end
+  notes
+end
+
+# Raíz del proyecto (sube un nivel desde la carpeta fastlane/ donde vive este Fastfile)
+def project_root
+  File.expand_path('..', __dir__)
+end
+
+# Escribe los changelogs reutilizados como archivos locales para la nueva versión
+def write_reused_changelogs(new_version_code, notes)
+  metadata_path = File.join(project_root, 'fastlane', 'metadata', 'android')
+
+  notes.each do |language, text|
+    changelog_dir = File.join(metadata_path, language, 'changelogs')
+    FileUtils.mkdir_p(changelog_dir)
+    File.write(File.join(changelog_dir, "#{new_version_code}.txt"), text)
+  end
+end
+
+platform :android do
+  desc "Calcula la próxima versión y notas a reutilizar sin subir nada"
+  lane :dry_run do
+    current_codes = google_play_track_version_codes(track: 'production')
+
+    previous_version_code = current_codes.max
+    UI.user_error!('No se encontró ninguna versión activa en producción para calcular el nuevo versionCode') unless previous_version_code
+
+    new_version_code = previous_version_code + 1
+    new_version_name = version_name_from_code(new_version_code)
+
+    UI.message("Versiones actuales en producción: #{current_codes.inspect}")
+    UI.success("Nueva versión: versionCode=#{new_version_code} versionName=#{new_version_name}")
+
+    notes = fetch_previous_release_notes(previous_version_code)
+    UI.message("Changelogs a reutilizar: #{notes.inspect}")
+  end
+
+  desc "Sube directamente a producción con versionCode/versionName automáticos, reutilizando metadata y changelog de la versión activa"
+  lane :deploy do
+    current_codes = google_play_track_version_codes(track: 'production')
+
+    previous_version_code = current_codes.max
+    UI.user_error!('No se encontró ninguna versión activa en producción para calcular el nuevo versionCode') unless previous_version_code
+
+    new_version_code = previous_version_code + 1
+    new_version_name = version_name_from_code(new_version_code)
+
+    UI.success("Nueva versión: versionCode=#{new_version_code} versionName=#{new_version_name}")
+
+    notes = fetch_previous_release_notes(previous_version_code)
+    write_reused_changelogs(new_version_code, notes)
+
+    gradle(
+      task: 'bundle',
+      build_type: 'Release',
+      properties: {
+        'versionCode' => new_version_code,
+        'versionName' => new_version_name
+      }
+    )
+
+    upload_to_play_store(
+      track: 'production',
+      release_status: 'completed',
+      aab: ENV['GRADLE_AAB_OUTPUT_PATH'],
+      metadata_path: File.join(project_root, 'fastlane', 'metadata', 'android'),
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end

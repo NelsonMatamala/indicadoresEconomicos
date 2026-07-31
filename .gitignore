@@ -47,6 +47,11 @@ Thumbs.db
 # Signing config
 signing.properties
 
+# fastlane
+fastlane/.env
+*.service-account.json
+fastlane/metadata/android/*/changelogs/
+
 # =============================
 # Optional: keep shared configs
 # =============================
