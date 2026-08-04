@@ -61,9 +61,7 @@ public class MainActivityModelView extends AndroidViewModel {
         return repository.cobre;
     }
 
-    public LiveData<List<SerieIndicador>> getDesempleoListObserver() {
-        return repository.desempleo;
-    }
+    public LiveData<List<SerieIndicador>> getDesempleoListObserver() {return repository.desempleo;}
 
     public LiveData<List<SerieIndicador>> getBitcoinListObserver() {
         return repository.bitcoin;
