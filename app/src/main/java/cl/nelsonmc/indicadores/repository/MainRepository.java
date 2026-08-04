@@ -25,6 +25,7 @@ import java.util.List;
 
 import cl.nelsonmc.indicadores.model.DataIndicador;
 import cl.nelsonmc.indicadores.model.SerieIndicador;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -49,6 +50,9 @@ public class MainRepository {
 
     public MainRepository(RemoteData client) {
         this.remoteData = client;
+    }
+
+    public void loadData() {
         getDolarData();
         getEuroData();
         getUFData();
@@ -65,11 +69,11 @@ public class MainRepository {
         disposables.clear();
     }
 
-    public void getDolarData() {
-        if (getPreferencesData(DOLAR) != null) {
-            dolar.setValue(getPreferencesData(DOLAR));
+    private void fetchIndicador(String indicatorKey, Observable<DataIndicador> observable, MutableLiveData<List<SerieIndicador>> liveData) {
+        if (getPreferencesData(indicatorKey) != null) {
+            liveData.setValue(getPreferencesData(indicatorKey));
         }
-        remoteData.getDataDolarObs().subscribeOn(Schedulers.io())
+        observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<DataIndicador>() {
                     @Override
@@ -79,13 +83,15 @@ public class MainRepository {
 
                     @Override
                     public void onNext(DataIndicador dataIndicador) {
-                        dolar.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(DOLAR,dataIndicador.getSerie());
+                        if (dataIndicador != null && dataIndicador.getSerie() != null) {
+                            liveData.setValue(dataIndicador.getSerie());
+                            sharedPreferences.setIndicadorValues(indicatorKey, dataIndicador.getSerie());
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d(TAG, e.getMessage());
+                        Log.e(TAG, "Error fetching " + indicatorKey + ": " + (e != null ? e.getMessage() : "unknown error"));
                     }
 
                     @Override
@@ -93,252 +99,44 @@ public class MainRepository {
                 });
     }
 
-    public void getEuroData() {
-        if (getPreferencesData(EURO) != null) {
-            euro.setValue(getPreferencesData(EURO));
-        }
-        remoteData.getDataEuroObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
-
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        euro.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(EURO,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG,"getDataEuroObs"+ e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() { }
-                });
+    private void getDolarData() {
+        fetchIndicador(DOLAR, remoteData.getDataDolarObs(), dolar);
     }
 
-    public void getUFData(){
-        if (getPreferencesData(UF) != null) {
-            uf.setValue(getPreferencesData(UF));
-        }
-        remoteData.getDataUFObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
-
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        uf.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(UF,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG,"getDataUFObs"+ e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() { }
-                });
+    private void getEuroData() {
+        fetchIndicador(EURO, remoteData.getDataEuroObs(), euro);
     }
 
-    public void getIVPData(){
-        if (getPreferencesData(IVP) != null) {
-            ivp.setValue(getPreferencesData(IVP));
-        }
-        remoteData.getDataIVPObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
-
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        ivp.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(IVP,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG,"getDataIVPObs"+ e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() { }
-                });
+    private void getUFData() {
+        fetchIndicador(UF, remoteData.getDataUFObs(), uf);
     }
 
-    public void getIPCData(){
-        if (getPreferencesData(IPC) != null) {
-            ipc.setValue(getPreferencesData(IPC));
-        }
-        remoteData.getDataIPCObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
-
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        ipc.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(IPC,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG,"getDataIPCObs"+ e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() { }
-                });
+    private void getIVPData() {
+        fetchIndicador(IVP, remoteData.getDataIVPObs(), ivp);
     }
 
-    public void getUTMData(){
-        if (getPreferencesData(UTM) != null) {
-            utm.setValue(getPreferencesData(UTM));
-        }
-        remoteData.getDataUTMObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
-
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        utm.setValue(dataIndicador.getSerie());
-                        Log.d(TAG,"UTM "+dataIndicador.getSerie().get(0).getValor());
-                        sharedPreferences.setIndicadorValues(UTM,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() { }
-                });
+    private void getIPCData() {
+        fetchIndicador(IPC, remoteData.getDataIPCObs(), ipc);
     }
 
-    public void getIMACECData(){
-        if (getPreferencesData(IMACEC) != null) {
-            imacec.setValue(getPreferencesData(IMACEC));
-        }
-        remoteData.getDataIMACECObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
-
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        imacec.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(IMACEC,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) { }
-
-                    @Override
-                    public void onComplete() { }
-                });
+    private void getUTMData() {
+        fetchIndicador(UTM, remoteData.getDataUTMObs(), utm);
     }
 
-    public void getCobreData(){
-        if (getPreferencesData(COBRE) != null) {
-            cobre.setValue(getPreferencesData(COBRE));
-        }
-        remoteData.getDataLibraCobreObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) { disposables.add(d); }
-
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        cobre.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(COBRE,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onComplete() { }
-                });
+    private void getIMACECData() {
+        fetchIndicador(IMACEC, remoteData.getDataIMACECObs(), imacec);
     }
 
-    public void getDesempleoData(){
-        if (getPreferencesData(DESEMPLEO) != null) {
-            desempleo.setValue(getPreferencesData(DESEMPLEO));
-        }
-        remoteData.getDataDesempleoObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) { disposables.add(d); }
-
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        desempleo.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(DESEMPLEO,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() { }
-                });
+    private void getCobreData() {
+        fetchIndicador(COBRE, remoteData.getDataLibraCobreObs(), cobre);
     }
 
-    public void getBitcoinData(){
-        if (getPreferencesData(BITCOIN) != null) {
-            bitcoin.setValue(getPreferencesData(BITCOIN));
-        }
-        remoteData.getDataBitcoinObs().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataIndicador>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        disposables.add(d);
-                    }
+    private void getDesempleoData() {
+        fetchIndicador(DESEMPLEO, remoteData.getDataDesempleoObs(), desempleo);
+    }
 
-                    @Override
-                    public void onNext(DataIndicador dataIndicador) {
-                        bitcoin.setValue(dataIndicador.getSerie());
-                        sharedPreferences.setIndicadorValues(BITCOIN,dataIndicador.getSerie());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+    private void getBitcoinData() {
+        fetchIndicador(BITCOIN, remoteData.getDataBitcoinObs(), bitcoin);
     }
 
     public ArrayList<SerieIndicador> getPreferencesData(String nameIndicador) {

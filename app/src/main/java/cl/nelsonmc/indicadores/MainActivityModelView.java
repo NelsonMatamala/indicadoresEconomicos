@@ -26,6 +26,7 @@ public class MainActivityModelView extends AndroidViewModel {
         ((BaseApplication) getApplication()).getRetrofitComponent().inject(this);
         repository = new MainRepository(client);
         utils = new Utils();
+        repository.loadData();
     }
 
     public LiveData<List<SerieIndicador>> getDolarListObserver() {
@@ -69,16 +70,7 @@ public class MainActivityModelView extends AndroidViewModel {
     }
 
     public void actualizarValores() {
-        repository.getDolarData();
-        repository.getEuroData();
-        repository.getUFData();
-        repository.getIVPData();
-        repository.getIPCData();
-        repository.getUTMData();
-        repository.getIMACECData();
-        repository.getCobreData();
-        repository.getDesempleoData();
-        repository.getBitcoinData();
+        repository.loadData();
     }
 
     public Boolean checkValueDecreased(String valueToday,String valueYesterday){
