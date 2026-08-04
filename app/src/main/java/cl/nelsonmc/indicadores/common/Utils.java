@@ -29,4 +29,10 @@ public class Utils {
         return ZonedDateTime.ofInstant(instantFecha, ZoneId.of("America/Santiago")).format(dtf);
     }
 
+    public String dateUtcToShortString(String fecha) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMM", new Locale("es", "ES"));
+        Instant instantFecha = Instant.parse(fecha);
+        return ZonedDateTime.ofInstant(instantFecha, ZoneId.of("America/Santiago")).format(dtf);
+    }
+
 }

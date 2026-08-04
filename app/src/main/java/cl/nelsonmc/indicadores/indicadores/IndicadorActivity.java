@@ -11,9 +11,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -21,6 +23,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import cl.nelsonmc.indicadores.R;
+import cl.nelsonmc.indicadores.common.Utils;
 import cl.nelsonmc.indicadores.indicadores.calculadora.CalcularFragment;
 import cl.nelsonmc.indicadores.indicadores.lista.ListaFragment;
 import cl.nelsonmc.indicadores.model.IndicadorList;
@@ -28,6 +31,7 @@ import cl.nelsonmc.indicadores.model.IndicadorList;
 public class IndicadorActivity extends AppCompatActivity {
 
     private ArrayList<IndicadorList> indicadorListArrayList;
+    private final ArrayList<String> fechasList = new ArrayList<>();
     private String tipoData;
 
     @Override
@@ -67,16 +71,31 @@ public class IndicadorActivity extends AppCompatActivity {
         lineChart.setPinchZoom(true);
         lineChart.getAxisRight().setEnabled(false);
         lineChart.getDescription().setText("");
-        lineChart.getXAxis().setDrawGridLines(false);
-        lineChart.getXAxis().setDrawAxisLine(false);
-        lineChart.getXAxis().setEnabled(false);
+        lineChart.setExtraBottomOffset(15f);
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setEnabled(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+        xAxis.setLabelRotationAngle(45f);
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int index = (int) value;
+                if (index >= 0 && index < fechasList.size()) {
+                    return fechasList.get(index);
+                }
+                return "";
+            }
+        });
 
         LineDataSet lineDataSet = new LineDataSet(valoresIndicador(),"Valores");
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
 
         lineDataSet.setLineWidth(2f);
         lineDataSet.setColor(Color.BLUE);
-        //lineDataSet.setDrawValues(false);  //quita los numeros
+        lineDataSet.setDrawValues(false);  //quita los numeros amontonados arriba
         lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lineDataSet.setCubicIntensity(0.2f);
         lineDataSet.setDrawFilled(true);
@@ -84,8 +103,10 @@ public class IndicadorActivity extends AppCompatActivity {
         lineDataSet.setFillAlpha(80);
         Legend legend = lineChart.getLegend();
         legend.setEnabled(false);
-        lineDataSet.setDrawCircles(false);
-        lineDataSet.setDrawHighlightIndicators(false);
+        lineDataSet.setDrawCircles(true); // muestra puntos para poder tocarlos o verlos claramente
+        lineDataSet.setCircleRadius(3f);
+        lineDataSet.setCircleColor(Color.BLUE);
+        lineDataSet.setDrawHighlightIndicators(true);
         dataSets.add(lineDataSet);
 
         LineData data = new LineData(dataSets);
@@ -95,10 +116,18 @@ public class IndicadorActivity extends AppCompatActivity {
 
     private ArrayList<Entry> valoresIndicador(){
         ArrayList<Entry> dataVals = new ArrayList<>();
+        fechasList.clear();
         int arraySize = indicadorListArrayList.size();
+        Utils utils = new Utils();
         for (int i = 0;i < arraySize;i++){
-            float valor = Float.parseFloat(indicadorListArrayList.get(arraySize - i -1).getValor());
+            IndicadorList indicador = indicadorListArrayList.get(arraySize - i - 1);
+            float valor = Float.parseFloat(indicador.getValor());
             dataVals.add(new Entry(i,valor));
+            try {
+                fechasList.add(utils.dateUtcToShortString(indicador.getFecha()));
+            } catch (Exception e) {
+                fechasList.add("");
+            }
         }
         return dataVals;
     }
