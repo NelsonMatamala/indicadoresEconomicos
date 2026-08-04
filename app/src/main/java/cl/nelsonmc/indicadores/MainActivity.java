@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        binding.swipeRefresh.setOnRefreshListener(() -> viewModel.actualizarValores());
+        binding.swipeRefresh.setOnRefreshListener(() -> viewModel.updateValues());
     }
 
     public void goToIndicador(View view) {
@@ -248,9 +248,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        viewModel.clearDisposable();
-    }
 }

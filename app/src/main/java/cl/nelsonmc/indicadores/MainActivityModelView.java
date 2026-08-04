@@ -67,7 +67,7 @@ public class MainActivityModelView extends AndroidViewModel {
         return repository.bitcoin;
     }
 
-    public void actualizarValores() {
+    public void updateValues() {
         repository.loadData();
     }
 
@@ -77,7 +77,9 @@ public class MainActivityModelView extends AndroidViewModel {
         return valorHoy < valorAyer;
     }
 
-    public void clearDisposable() {
+    @Override
+    protected void onCleared() {
+        super.onCleared();
         repository.clearDisposable();
     }
 
