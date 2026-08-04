@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.indicadores.calculadora.CalcularFragment;
 import cl.nelsonmc.indicadores.indicadores.lista.ListaFragment;
-import cl.nelsonmc.indicadores.model.SerieIndicador;
+import cl.nelsonmc.indicadores.model.IndicadorList;
 
 public class IndicadorActivity extends AppCompatActivity {
 
-    private ArrayList<SerieIndicador> serieIndicadorArrayList;
+    private ArrayList<IndicadorList> indicadorListArrayList;
     private String tipoData;
 
     @Override
@@ -44,16 +44,16 @@ public class IndicadorActivity extends AppCompatActivity {
 
         Gson gson = new Gson();
         String json = sharedPreferences.getDataByName(tipoData);
-        Type type = new TypeToken<ArrayList<SerieIndicador>>() {}.getType();
-        serieIndicadorArrayList = gson.fromJson(json, type);
+        Type type = new TypeToken<ArrayList<IndicadorList>>() {}.getType();
+        indicadorListArrayList = gson.fromJson(json, type);
 
-        if (serieIndicadorArrayList == null) {
-            serieIndicadorArrayList = new ArrayList<>();
+        if (indicadorListArrayList == null) {
+            indicadorListArrayList = new ArrayList<>();
         }
 
         Bundle datos = new Bundle();
         datos.putString("tipoData",tipoData);
-        datos.putSerializable("indicador",serieIndicadorArrayList.get(0));
+        datos.putSerializable("indicador", indicadorListArrayList.get(0));
         Fragment calcularFragment = new CalcularFragment();
         calcularFragment.setArguments(datos);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, calcularFragment ).commit();
@@ -95,9 +95,9 @@ public class IndicadorActivity extends AppCompatActivity {
 
     private ArrayList<Entry> valoresIndicador(){
         ArrayList<Entry> dataVals = new ArrayList<>();
-        int arraySize = serieIndicadorArrayList.size();
+        int arraySize = indicadorListArrayList.size();
         for (int i = 0;i < arraySize;i++){
-            float valor = Float.parseFloat(serieIndicadorArrayList.get(arraySize - i -1).getValor());
+            float valor = Float.parseFloat(indicadorListArrayList.get(arraySize - i -1).getValor());
             dataVals.add(new Entry(i,valor));
         }
         return dataVals;
@@ -114,13 +114,13 @@ public class IndicadorActivity extends AppCompatActivity {
             if (id == R.id.calcular) {
                 datos = new Bundle();
                 datos.putString("tipoData", tipoData);
-                datos.putSerializable("indicador", serieIndicadorArrayList.get(0));
+                datos.putSerializable("indicador", indicadorListArrayList.get(0));
                 selectedFragment = new CalcularFragment();
                 selectedFragment.setArguments(datos);
 
             } else if (id == R.id.lista) {
                 datos = new Bundle();
-                datos.putSerializable("arrayList", serieIndicadorArrayList);
+                datos.putSerializable("arrayList", indicadorListArrayList);
                 datos.putString("tipoData", tipoData);
                 selectedFragment = new ListaFragment();
                 selectedFragment.setArguments(datos);

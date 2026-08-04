@@ -11,7 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import cl.nelsonmc.indicadores.common.Utils;
-import cl.nelsonmc.indicadores.model.SerieIndicador;
+import cl.nelsonmc.indicadores.model.IndicadorList;
 import cl.nelsonmc.indicadores.repository.MainRepository;
 import cl.nelsonmc.indicadores.repository.RemoteData;
 
@@ -29,41 +29,41 @@ public class MainActivityModelView extends AndroidViewModel {
         repository.loadData();
     }
 
-    public LiveData<List<SerieIndicador>> getDolarListObserver() {
+    public LiveData<List<IndicadorList>> getDolarListObserver() {
         return repository.dolar;
     }
 
-    public LiveData<List<SerieIndicador>> getEuroListObserver() {
+    public LiveData<List<IndicadorList>> getEuroListObserver() {
         return repository.euro;
     }
 
-    public LiveData<List<SerieIndicador>> getUFListObserver() {
+    public LiveData<List<IndicadorList>> getUFListObserver() {
         return repository.uf;
     }
 
-    public LiveData<List<SerieIndicador>> getIVPListObserver() {
+    public LiveData<List<IndicadorList>> getIVPListObserver() {
         return repository.ivp;
     }
 
-    public LiveData<List<SerieIndicador>> getIPCListObserver() {
+    public LiveData<List<IndicadorList>> getIPCListObserver() {
         return repository.ipc;
     }
 
-    public LiveData<List<SerieIndicador>> getUTMListObserver() {
+    public LiveData<List<IndicadorList>> getUTMListObserver() {
         return repository.utm;
     }
 
-    public LiveData<List<SerieIndicador>> getIMACECListObserver() {
+    public LiveData<List<IndicadorList>> getIMACECListObserver() {
         return repository.imacec;
     }
 
-    public LiveData<List<SerieIndicador>> getCobreListObserver() {
+    public LiveData<List<IndicadorList>> getCobreListObserver() {
         return repository.cobre;
     }
 
-    public LiveData<List<SerieIndicador>> getDesempleoListObserver() {return repository.desempleo;}
+    public LiveData<List<IndicadorList>> getDesempleoListObserver() {return repository.desempleo;}
 
-    public LiveData<List<SerieIndicador>> getBitcoinListObserver() {
+    public LiveData<List<IndicadorList>> getBitcoinListObserver() {
         return repository.bitcoin;
     }
 

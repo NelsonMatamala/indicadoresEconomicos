@@ -10,14 +10,14 @@ import java.util.ArrayList;
 
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.common.Utils;
-import cl.nelsonmc.indicadores.model.SerieIndicador;
+import cl.nelsonmc.indicadores.model.IndicadorList;
 
 public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.ViewHolderIndicadores> {
-    private final ArrayList<SerieIndicador> indicadores;
+    private final ArrayList<IndicadorList> indicadores;
     private final String tipoData;
     private final Utils utils;
 
-    public AdapterIndicadores(ArrayList<SerieIndicador> indicadores,String tipoData) {
+    public AdapterIndicadores(ArrayList<IndicadorList> indicadores, String tipoData) {
         this.indicadores = indicadores;
         this.tipoData = tipoData;
         this.utils = new Utils();
@@ -54,7 +54,7 @@ public class AdapterIndicadores extends RecyclerView.Adapter<AdapterIndicadores.
             tipoValor = itemView.findViewById(R.id.tipoValor);
         }
 
-        public void setListIndicadores(SerieIndicador indicadorModel) {
+        public void setListIndicadores(IndicadorList indicadorModel) {
 
             if(tipoData.equals("ipc") || tipoData.equals("imacec") || tipoData.equals("desempleo")){
                 tipoValor.setText("%");

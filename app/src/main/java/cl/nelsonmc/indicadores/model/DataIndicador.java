@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class DataIndicador {
     private String nombre;
-    private ArrayList<SerieIndicador> serie;
+    private ArrayList<IndicadorList> serie;
 
     public String getNombre() {
         return nombre;
     }
     
-    public ArrayList<SerieIndicador> getSerie() {
+    public ArrayList<IndicadorList> getSerie() {
         return serie;
     }
 }

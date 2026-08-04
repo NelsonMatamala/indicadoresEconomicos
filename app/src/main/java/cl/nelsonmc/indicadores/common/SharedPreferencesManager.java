@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-import cl.nelsonmc.indicadores.model.SerieIndicador;
+import cl.nelsonmc.indicadores.model.IndicadorList;
 
 public class SharedPreferencesManager {
     private static SharedPreferencesManager instance;
@@ -38,7 +38,7 @@ public class SharedPreferencesManager {
         editor.apply();
     }
 
-    public void setIndicadorValues(String name, ArrayList<SerieIndicador> newValue) {
+    public void setIndicadorValues(String name, ArrayList<IndicadorList> newValue) {
         Gson gson = new Gson();
         String jsonData = gson.toJson(newValue);
         editor.putString(name , jsonData);

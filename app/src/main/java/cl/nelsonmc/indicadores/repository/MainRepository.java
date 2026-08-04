@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cl.nelsonmc.indicadores.model.DataIndicador;
-import cl.nelsonmc.indicadores.model.SerieIndicador;
+import cl.nelsonmc.indicadores.model.IndicadorList;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,16 +37,16 @@ public class MainRepository {
     public RemoteData remoteData;
 
     private final CompositeDisposable disposables = new CompositeDisposable();
-    public MutableLiveData<List<SerieIndicador>> dolar = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> euro = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> uf = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> ivp = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> ipc = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> utm = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> imacec = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> cobre = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> desempleo = new MutableLiveData<>();
-    public MutableLiveData<List<SerieIndicador>> bitcoin = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> dolar = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> euro = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> uf = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> ivp = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> ipc = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> utm = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> imacec = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> cobre = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> desempleo = new MutableLiveData<>();
+    public MutableLiveData<List<IndicadorList>> bitcoin = new MutableLiveData<>();
 
     public MainRepository(RemoteData client) {
         this.remoteData = client;
@@ -69,7 +69,7 @@ public class MainRepository {
         disposables.clear();
     }
 
-    private void fetchIndicador(String indicatorKey, Observable<DataIndicador> observable, MutableLiveData<List<SerieIndicador>> liveData) {
+    private void fetchIndicador(String indicatorKey, Observable<DataIndicador> observable, MutableLiveData<List<IndicadorList>> liveData) {
         if (getPreferencesData(indicatorKey) != null) {
             liveData.setValue(getPreferencesData(indicatorKey));
         }
@@ -139,9 +139,9 @@ public class MainRepository {
         fetchIndicador(BITCOIN, remoteData.getDataBitcoinObs(), bitcoin);
     }
 
-    public ArrayList<SerieIndicador> getPreferencesData(String nameIndicador) {
+    public ArrayList<IndicadorList> getPreferencesData(String nameIndicador) {
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<SerieIndicador>>() {}.getType();
+        Type type = new TypeToken<ArrayList<IndicadorList>>() {}.getType();
         String jsonString = sharedPreferences.getDataByName(nameIndicador);
         if (!jsonString.isEmpty()) {
             return gson.fromJson(jsonString, type);

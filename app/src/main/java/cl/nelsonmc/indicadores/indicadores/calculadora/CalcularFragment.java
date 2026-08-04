@@ -17,10 +17,10 @@ import androidx.fragment.app.Fragment;
 
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.common.Utils;
-import cl.nelsonmc.indicadores.model.SerieIndicador;
+import cl.nelsonmc.indicadores.model.IndicadorList;
 
 public class CalcularFragment extends Fragment {
-    private SerieIndicador serieIndicador;
+    private IndicadorList indicadorList;
     private String tipoData;
     private EditText editTextNumber, editTextValorCalculo;
     private TextView textViewUp;
@@ -31,7 +31,7 @@ public class CalcularFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            serieIndicador = (SerieIndicador) getArguments().getSerializable("indicador");
+            indicadorList = (IndicadorList) getArguments().getSerializable("indicador");
             tipoData = getArguments().getString("tipoData");
             utils = new Utils();
         }
@@ -49,7 +49,7 @@ public class CalcularFragment extends Fragment {
         editTextNumber = view.findViewById(R.id.editTextIndicador);
         textViewUp.setText(tipoData.toUpperCase());
         textViewUp.setTag(tipoData.toUpperCase());
-        textUltimaFecha.setText(utils.dateUtcToString(serieIndicador.getFecha()));
+        textUltimaFecha.setText(utils.dateUtcToString(indicadorList.getFecha()));
         editTextValorCalculo = view.findViewById(R.id.editTextCalculo);
 
         if (tipoData.equals("bitcoin")) {
@@ -94,7 +94,7 @@ public class CalcularFragment extends Fragment {
     }
 
     private void calculateAndSetValue() {
-        float indicadorValor = Float.parseFloat(serieIndicador.getValor());
+        float indicadorValor = Float.parseFloat(indicadorList.getValor());
         float valor = Float.parseFloat(editTextNumber.getText().toString());
         float multiplicacion;
         if (textViewUp.getTag().equals(textViewUp.getText())) {
