@@ -120,6 +120,7 @@ public class IndicadorActivity extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
+        lineChart.setMarker(new CustomMarkerView(this, fechasList));
         lineChart.invalidate();
     }
 
