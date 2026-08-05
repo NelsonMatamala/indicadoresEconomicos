@@ -4,6 +4,7 @@ import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,12 +34,14 @@ public class IndicadorActivity extends AppCompatActivity {
     private ArrayList<IndicadorList> indicadorListArrayList;
     private final ArrayList<String> fechasList = new ArrayList<>();
     private String tipoData;
+    private final Utils utils = new Utils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indicador);
         TextView tittle = findViewById(R.id.textTitulo);
+        TextView indicatorValue = findViewById(R.id.txtValue);
         BottomNavigationView bottomNav = findViewById(R.id.navigator_bottom);
         bottomNav.setOnNavigationItemSelectedListener( bottomListener );
 
@@ -53,6 +56,10 @@ public class IndicadorActivity extends AppCompatActivity {
 
         if (indicadorListArrayList == null) {
             indicadorListArrayList = new ArrayList<>();
+        }
+
+        if (!indicadorListArrayList.isEmpty() && indicatorValue != null) {
+            indicatorValue.setText(utils.decimalFormat(indicadorListArrayList.get(0).getValor()));
         }
 
         Bundle datos = new Bundle();
@@ -79,6 +86,8 @@ public class IndicadorActivity extends AppCompatActivity {
         xAxis.setDrawGridLines(false);
         xAxis.setGranularity(1f);
         xAxis.setLabelRotationAngle(45f);
+        xAxis.setTextColor(ContextCompat.getColor(this, R.color.colorFontValor));
+        lineChart.getAxisLeft().setTextColor(ContextCompat.getColor(this, R.color.colorFontValor));
         xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
