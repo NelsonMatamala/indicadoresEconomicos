@@ -31,9 +31,9 @@ import cl.nelsonmc.indicadores.model.IndicadorList;
 
 public class IndicadorActivity extends AppCompatActivity {
 
-    private ArrayList<IndicadorList> indicadorListArrayList;
-    private final ArrayList<String> fechasList = new ArrayList<>();
-    private String tipoData;
+    private ArrayList<IndicadorList> indicadorList;
+    private final ArrayList<String> dateList = new ArrayList<>();
+    private String dataType;
     private final Utils utils = new Utils();
 
     @Override
@@ -46,25 +46,25 @@ public class IndicadorActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener( bottomListener );
 
         Bundle extras   = getIntent().getExtras();
-        tipoData        = extras != null ? extras.getString("tipoData") : "";
-        tittle.setText(tipoData.toUpperCase());
+        dataType = extras != null ? extras.getString("tipoData") : "";
+        tittle.setText(dataType.toUpperCase());
 
         Gson gson = new Gson();
-        String json = sharedPreferences.getDataByName(tipoData);
+        String json = sharedPreferences.getDataByName(dataType);
         Type type = new TypeToken<ArrayList<IndicadorList>>() {}.getType();
-        indicadorListArrayList = gson.fromJson(json, type);
+        indicadorList = gson.fromJson(json, type);
 
-        if (indicadorListArrayList == null) {
-            indicadorListArrayList = new ArrayList<>();
+        if (indicadorList == null) {
+            indicadorList = new ArrayList<>();
         }
 
-        if (!indicadorListArrayList.isEmpty() && indicatorValue != null) {
-            indicatorValue.setText(utils.decimalFormat(indicadorListArrayList.get(0).getValor()));
+        if (!indicadorList.isEmpty() && indicatorValue != null) {
+            indicatorValue.setText(utils.decimalFormat(indicadorList.get(0).getValor()));
         }
 
         Bundle datos = new Bundle();
-        datos.putString("tipoData",tipoData);
-        datos.putSerializable("indicador", indicadorListArrayList.get(0));
+        datos.putString("tipoData", dataType);
+        datos.putSerializable("indicador", indicadorList.get(0));
         Fragment calcularFragment = new CalcularFragment();
         calcularFragment.setArguments(datos);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, calcularFragment ).commit();
@@ -92,8 +92,8 @@ public class IndicadorActivity extends AppCompatActivity {
             @Override
             public String getFormattedValue(float value) {
                 int index = (int) value;
-                if (index >= 0 && index < fechasList.size()) {
-                    return fechasList.get(index);
+                if (index >= 0 && index < dateList.size()) {
+                    return dateList.get(index);
                 }
                 return "";
             }
@@ -120,23 +120,23 @@ public class IndicadorActivity extends AppCompatActivity {
 
         LineData data = new LineData(dataSets);
         lineChart.setData(data);
-        lineChart.setMarker(new CustomMarkerView(this, fechasList));
+        lineChart.setMarker(new CustomMarkerView(this, dateList));
         lineChart.invalidate();
     }
 
     private ArrayList<Entry> valoresIndicador(){
         ArrayList<Entry> dataVals = new ArrayList<>();
-        fechasList.clear();
-        int arraySize = indicadorListArrayList.size();
+        dateList.clear();
+        int arraySize = indicadorList.size();
         Utils utils = new Utils();
         for (int i = 0;i < arraySize;i++){
-            IndicadorList indicador = indicadorListArrayList.get(arraySize - i - 1);
+            IndicadorList indicador = indicadorList.get(arraySize - i - 1);
             float valor = Float.parseFloat(indicador.getValor());
             dataVals.add(new Entry(i,valor));
             try {
-                fechasList.add(utils.dateUtcToShortString(indicador.getFecha()));
+                dateList.add(utils.dateUtcToShortString(indicador.getFecha()));
             } catch (Exception e) {
-                fechasList.add("");
+                dateList.add("");
             }
         }
         return dataVals;
@@ -152,15 +152,15 @@ public class IndicadorActivity extends AppCompatActivity {
 
             if (id == R.id.calcular) {
                 datos = new Bundle();
-                datos.putString("tipoData", tipoData);
-                datos.putSerializable("indicador", indicadorListArrayList.get(0));
+                datos.putString("tipoData", dataType);
+                datos.putSerializable("indicador", indicadorList.get(0));
                 selectedFragment = new CalcularFragment();
                 selectedFragment.setArguments(datos);
 
             } else if (id == R.id.lista) {
                 datos = new Bundle();
-                datos.putSerializable("arrayList", indicadorListArrayList);
-                datos.putString("tipoData", tipoData);
+                datos.putSerializable("arrayList", indicadorList);
+                datos.putString("tipoData", dataType);
                 selectedFragment = new ListaFragment();
                 selectedFragment.setArguments(datos);
 

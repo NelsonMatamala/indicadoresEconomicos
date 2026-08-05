@@ -50,6 +50,9 @@ signing.properties
 # fastlane
 fastlane/.env
 *.service-account.json
+fastlane/report.xml
+fastlane/screenshots/
+fastlane/output.txt
 fastlane/metadata/android/*/changelogs/
 
 # =============================
