@@ -3,15 +3,21 @@
     <string name="ivp">IVP</string>
     <string name="uf">UF</string>
     <string name="euro">EURO</string>
-    <string name="dolar">DOLAR</string>
+    <string name="dolar">DÓLAR</string>
     <string name="ipc">IPC</string>
     <string name="desempleo">DESEMPLEO</string>
     <string name="libra_de_cobre">LIBRA DE COBRE</string>
     <string name="bitcoin">BITCOIN</string>
     <string name="usd">$USD</string>
+    <string name="utm">UTM</string>
+    <string name="imacec">IMACEC</string>
     <string name="claro">Claro</string>
     <string name="oscuro">Oscuro</string>
     <string name="predeterminado_del_sistema">Predeterminado del sistema</string>
     <string name="definir_tema">Definir Tema</string>
     <string name="ultima_actualizacion">Última actualización</string>
+    <string name="share_title">📊 Indicadores Económicos Chile</string>
+    <string name="share_chooser">Compartir vía</string>
+    <string name="share_download_prompt">Descárgalo en Google Play:</string>
+    <string name="share_playstore_url">https://play.google.com/store/apps/details?id=cl.nelsonmc.indicadores</string>
 </resources>

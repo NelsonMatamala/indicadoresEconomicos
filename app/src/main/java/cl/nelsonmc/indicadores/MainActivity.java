@@ -35,6 +35,7 @@ import java.util.Objects;
 
 import cl.nelsonmc.indicadores.databinding.ActivityMainBinding;
 import cl.nelsonmc.indicadores.indicadores.IndicadorActivity;
+import cl.nelsonmc.indicadores.common.Utils;
 
 public class MainActivity extends AppCompatActivity {
     private MainActivityModelView viewModel;
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         CollapsingToolbarLayout coll_toolbar = findViewById(R.id.collapsing_toolbar_layout);
-        coll_toolbar.setTitle("Indicadores");
+        coll_toolbar.setTitle(getString(R.string.app_name));
         coll_toolbar.setCollapsedTitleTextAppearance(R.style.coll_toolbar_title);
         coll_toolbar.setExpandedTitleTextAppearance(R.style.exp_toolbar_title);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
@@ -197,7 +198,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.showBottomMenu) {
+        if (item.getItemId() == R.id.action_share) {
+            shareIndicators();
+            return true;
+        } else if (item.getItemId() == R.id.showBottomMenu) {
             bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
             bottomSheetDialog.setContentView(R.layout.layout_bottom_sheet);
             uiModeOptions();
@@ -246,6 +250,49 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case PREDETERMINADO:
                 rb_sistema.setChecked(true);
+        }
+    }
+
+    private void shareIndicators() {
+        Utils utils = new Utils();
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.share_title)).append("\n\n");
+
+        appendIndicatorSummary(sb, utils.capitalize(getString(R.string.dolar)), binding.nScroll.valorDolarTextView.getText(), binding.nScroll.fechaDolarTextView.getText(), "$");
+        appendIndicatorSummary(sb, utils.capitalize(getString(R.string.euro)), binding.nScroll.valorEuroTextView.getText(), binding.nScroll.fechaEuroTextView.getText(), "$");
+        appendIndicatorSummary(sb, getString(R.string.uf), binding.nScroll.valorUFTextView.getText(), binding.nScroll.fechaUFTextView.getText(), "$");
+        appendIndicatorSummary(sb, getString(R.string.ivp), binding.nScroll.valorIVPTextView.getText(), binding.nScroll.fechaIVPTextView.getText(), "$");
+        appendIndicatorSummary(sb, getString(R.string.ipc), binding.nScroll.valorIPCTextView.getText(), binding.nScroll.fechaIPCTextView.getText(), "%");
+        appendIndicatorSummary(sb, getString(R.string.utm), binding.nScroll.valorUTMTextView.getText(), binding.nScroll.fechaUTMTextView.getText(), "$");
+        appendIndicatorSummary(sb, getString(R.string.imacec), binding.nScroll.valorIMACECTextView.getText(), binding.nScroll.fechaIMACECTextView.getText(), "%");
+        appendIndicatorSummary(sb, utils.capitalize(getString(R.string.libra_de_cobre)), binding.nScroll.valorCobreTextView.getText(), binding.nScroll.fechaCobreTextView.getText(), "USD");
+        appendIndicatorSummary(sb, utils.capitalize(getString(R.string.desempleo)), binding.nScroll.valorDesempleoTextView.getText(), binding.nScroll.fechaDesempleoTextView.getText(), "%");
+        appendIndicatorSummary(sb, getString(R.string.bitcoin), binding.nScroll.valorBitcoinTextView.getText(), binding.nScroll.fechaBitcoinTextView.getText(), "USD");
+
+        sb.append("\n").append(getString(R.string.share_download_prompt))
+                .append("\n").append(getString(R.string.share_playstore_url));
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_title));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_chooser)));
+    }
+
+    private void appendIndicatorSummary(StringBuilder sb, String name, CharSequence valor, CharSequence fecha, String unit) {
+        if (valor != null && valor.length() > 0) {
+            sb.append("• ").append(name).append(": ");
+            if (unit.equals("$")) {
+                sb.append("$").append(valor);
+            } else if (unit.equals("%")) {
+                sb.append(valor).append("%");
+            } else {
+                sb.append(valor).append(" ").append(unit);
+            }
+            if (fecha != null && fecha.length() > 0) {
+                sb.append(" (").append(fecha).append(")");
+            }
+            sb.append("\n");
         }
     }
 
