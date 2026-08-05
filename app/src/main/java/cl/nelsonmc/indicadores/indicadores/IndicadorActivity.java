@@ -1,6 +1,8 @@
 package cl.nelsonmc.indicadores.indicadores;
 
 import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
+import static cl.nelsonmc.indicadores.common.Constants.DATAYPE;
+import static cl.nelsonmc.indicadores.common.Constants.INDICATOR;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,7 +48,7 @@ public class IndicadorActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener( bottomListener );
 
         Bundle extras   = getIntent().getExtras();
-        dataType = extras != null ? extras.getString("tipoData") : "";
+        dataType = extras != null ? extras.getString(DATAYPE) : "";
         tittle.setText(dataType.toUpperCase());
 
         Gson gson = new Gson();
@@ -63,8 +65,8 @@ public class IndicadorActivity extends AppCompatActivity {
         }
 
         Bundle datos = new Bundle();
-        datos.putString("tipoData", dataType);
-        datos.putSerializable("indicador", indicadorList.get(0));
+        datos.putString(DATAYPE, dataType);
+        datos.putSerializable(INDICATOR, indicadorList.get(0));
         Fragment calcularFragment = new CalcularFragment();
         calcularFragment.setArguments(datos);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, calcularFragment ).commit();
@@ -152,15 +154,15 @@ public class IndicadorActivity extends AppCompatActivity {
 
             if (id == R.id.calcular) {
                 datos = new Bundle();
-                datos.putString("tipoData", dataType);
-                datos.putSerializable("indicador", indicadorList.get(0));
+                datos.putString(DATAYPE, dataType);
+                datos.putSerializable(INDICATOR, indicadorList.get(0));
                 selectedFragment = new CalcularFragment();
                 selectedFragment.setArguments(datos);
 
             } else if (id == R.id.lista) {
                 datos = new Bundle();
                 datos.putSerializable("arrayList", indicadorList);
-                datos.putString("tipoData", dataType);
+                datos.putString(DATAYPE, dataType);
                 selectedFragment = new ListaFragment();
                 selectedFragment.setArguments(datos);
 

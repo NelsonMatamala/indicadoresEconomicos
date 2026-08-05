@@ -1,5 +1,7 @@
 package cl.nelsonmc.indicadores.indicadores.lista;
 
+import static cl.nelsonmc.indicadores.common.Constants.DATAYPE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,7 @@ public class ListaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
             indicadorListArrayList = (ArrayList<IndicadorList>) getArguments().getSerializable("arrayList");
-            tipoData = getArguments().getString("tipoData");
+            tipoData = getArguments().getString(DATAYPE);
         }
     }
 

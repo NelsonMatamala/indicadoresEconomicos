@@ -1,5 +1,8 @@
 package cl.nelsonmc.indicadores.indicadores.calculadora;
 
+import static cl.nelsonmc.indicadores.common.Constants.DATAYPE;
+import static cl.nelsonmc.indicadores.common.Constants.INDICATOR;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,8 +34,8 @@ public class CalcularFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            indicadorList = (IndicadorList) getArguments().getSerializable("indicador");
-            tipoData = getArguments().getString("tipoData");
+            indicadorList = (IndicadorList) getArguments().getSerializable(INDICATOR);
+            tipoData = getArguments().getString(DATAYPE);
             utils = new Utils();
         }
     }

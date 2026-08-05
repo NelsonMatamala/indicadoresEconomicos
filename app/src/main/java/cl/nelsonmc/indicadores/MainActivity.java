@@ -2,6 +2,7 @@ package cl.nelsonmc.indicadores;
 
 import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
 import static cl.nelsonmc.indicadores.common.Constants.DARKMODE;
+import static cl.nelsonmc.indicadores.common.Constants.DATAYPE;
 import static cl.nelsonmc.indicadores.common.Constants.LIGHTMODE;
 import static cl.nelsonmc.indicadores.common.Constants.MODE_UI;
 import static cl.nelsonmc.indicadores.common.Constants.PREDETERMINADO;
@@ -184,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         Intent intent = new Intent(MainActivity.this, IndicadorActivity.class);
-        intent.putExtra("tipoData", (String) view.getTag());
+        intent.putExtra(DATAYPE, (String) view.getTag());
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
     }
 

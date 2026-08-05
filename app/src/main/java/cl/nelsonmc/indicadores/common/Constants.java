@@ -9,6 +9,11 @@ public class Constants {
     //SharedPreferences
     public static final String MODE_UI = "optionMode";
 
+    //Arguments
+    public static final String DATAYPE =  "tipoData";
+    public static final String INDICATOR =  "indicador";
+
+
     //Indicadores
     public static final String DOLAR = "dolar";
     public static final String EURO = "euro";
