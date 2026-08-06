@@ -6,7 +6,10 @@ import static cl.nelsonmc.indicadores.common.Constants.INDICATOR;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -25,6 +28,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.common.BaseActivity;
 import cl.nelsonmc.indicadores.common.Utils;
@@ -43,14 +48,21 @@ public class IndicadorActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_indicador);
-        TextView tittle = findViewById(R.id.textTitulo);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        ViewCompat.setOnApplyWindowInsetsListener(toolbar, (v, insets) -> {
+            int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+            v.setPadding(v.getPaddingLeft(), top, v.getPaddingRight(), v.getPaddingBottom());
+            return WindowInsetsCompat.CONSUMED;
+        });
         TextView indicatorValue = findViewById(R.id.txtValue);
         BottomNavigationView bottomNav = findViewById(R.id.navigator_bottom);
         bottomNav.setOnNavigationItemSelectedListener( bottomListener );
 
         Bundle extras   = getIntent().getExtras();
         dataType = extras != null ? extras.getString(DATAYPE) : "";
-        tittle.setText(dataType.toUpperCase());
+        Objects.requireNonNull(getSupportActionBar()).setTitle(dataType.toUpperCase());
 
         Gson gson = new Gson();
         String json = sharedPreferences.getDataByName(dataType);

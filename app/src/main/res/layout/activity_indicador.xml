@@ -8,18 +8,15 @@
     tools:viewBindingIgnore="true"
     tools:context=".presentation.indicadores.IndicadorActivity">
 
-    <TextView
-        android:id="@+id/textTitulo"
-        style="@style/tittleIndicador"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="center"
-        android:text="@string/dolar"
-        android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="8dp"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@drawable/gradient_toolbar"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:titleTextAppearance="@style/coll_toolbar_title"
+        app:titleTextColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +31,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTitulo">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"

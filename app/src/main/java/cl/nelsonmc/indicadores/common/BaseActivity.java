@@ -1,6 +1,5 @@
 package cl.nelsonmc.indicadores.common;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -18,18 +17,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         setupStatusBarAppearance();
     }
-    
-    protected boolean useDarkStatusBarIcons() {
-        int nightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        return nightMode != Configuration.UI_MODE_NIGHT_YES;
-    }
 
     protected void setupStatusBarAppearance() {
         WindowInsetsControllerCompat controller =
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         if (controller != null) {
-            controller.setAppearanceLightStatusBars(useDarkStatusBarIcons());
+            controller.setAppearanceLightStatusBars(false);
         }
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorBackground));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
     }
 }

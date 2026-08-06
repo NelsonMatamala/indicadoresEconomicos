@@ -45,11 +45,6 @@ public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
 
     @Override
-    protected boolean useDarkStatusBarIcons() {
-        return false;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
