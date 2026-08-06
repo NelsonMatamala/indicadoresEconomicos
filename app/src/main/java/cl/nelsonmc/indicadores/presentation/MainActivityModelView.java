@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores;
+package cl.nelsonmc.indicadores.presentation;
 
 import android.app.Application;
 
@@ -10,10 +10,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import cl.nelsonmc.indicadores.BaseApplication;
 import cl.nelsonmc.indicadores.common.Utils;
-import cl.nelsonmc.indicadores.model.IndicadorList;
-import cl.nelsonmc.indicadores.repository.MainRepository;
-import cl.nelsonmc.indicadores.repository.RemoteData;
+import cl.nelsonmc.indicadores.domain.model.IndicadorList;
+import cl.nelsonmc.indicadores.domain.repository.MainRepository;
+import cl.nelsonmc.indicadores.domain.repository.RemoteData;
 
 public class MainActivityModelView extends AndroidViewModel {
     @Inject

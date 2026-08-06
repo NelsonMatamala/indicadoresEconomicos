@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.indicadores.calculadora;
+package cl.nelsonmc.indicadores.presentation.indicadores.calculadora;
 
 import static cl.nelsonmc.indicadores.common.Constants.DATAYPE;
 import static cl.nelsonmc.indicadores.common.Constants.INDICATOR;
@@ -20,7 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.common.Utils;
-import cl.nelsonmc.indicadores.model.IndicadorList;
+import cl.nelsonmc.indicadores.domain.model.IndicadorList;
 
 public class CalcularFragment extends Fragment {
     private IndicadorList indicadorList;

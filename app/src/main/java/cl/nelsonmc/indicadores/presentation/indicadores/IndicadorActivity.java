@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.indicadores;
+package cl.nelsonmc.indicadores.presentation.indicadores;
 
 import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
 import static cl.nelsonmc.indicadores.common.Constants.DATAYPE;
@@ -27,9 +27,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.common.Utils;
-import cl.nelsonmc.indicadores.indicadores.calculadora.CalcularFragment;
-import cl.nelsonmc.indicadores.indicadores.lista.ListaFragment;
-import cl.nelsonmc.indicadores.model.IndicadorList;
+import cl.nelsonmc.indicadores.presentation.indicadores.calculadora.CalcularFragment;
+import cl.nelsonmc.indicadores.presentation.indicadores.lista.ListaFragment;
+import cl.nelsonmc.indicadores.domain.model.IndicadorList;
 
 public class IndicadorActivity extends AppCompatActivity {
 

@@ -1,7 +1,7 @@
-package cl.nelsonmc.indicadores.repository.retrofitdi;
+package cl.nelsonmc.indicadores.domain.repository.retrofitdi;
 
 import javax.inject.Singleton;
-import cl.nelsonmc.indicadores.MainActivityModelView;
+import cl.nelsonmc.indicadores.presentation.MainActivityModelView;
 import dagger.Component;
 
 //puente entre los modulos y el codigo que solicita la inyeccion

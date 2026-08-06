@@ -1,10 +1,10 @@
-package cl.nelsonmc.indicadores.repository.retrofitdi;
+package cl.nelsonmc.indicadores.domain.repository.retrofitdi;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
-import cl.nelsonmc.indicadores.repository.RemoteData;
+import cl.nelsonmc.indicadores.domain.repository.RemoteData;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;

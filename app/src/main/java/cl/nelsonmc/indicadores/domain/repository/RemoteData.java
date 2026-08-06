@@ -1,6 +1,6 @@
-package cl.nelsonmc.indicadores.repository;
+package cl.nelsonmc.indicadores.domain.repository;
 
-import cl.nelsonmc.indicadores.model.DataIndicador;
+import cl.nelsonmc.indicadores.domain.model.DataIndicador;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 

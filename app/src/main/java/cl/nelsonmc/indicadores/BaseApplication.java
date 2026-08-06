@@ -10,9 +10,9 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import cl.nelsonmc.indicadores.common.Constants;
 import cl.nelsonmc.indicadores.common.SharedPreferencesManager;
-import cl.nelsonmc.indicadores.repository.retrofitdi.DaggerRetrofitComponent;
-import cl.nelsonmc.indicadores.repository.retrofitdi.RetrofitComponent;
-import cl.nelsonmc.indicadores.repository.retrofitdi.RetrofitModule;
+import cl.nelsonmc.indicadores.domain.repository.retrofitdi.DaggerRetrofitComponent;
+import cl.nelsonmc.indicadores.domain.repository.retrofitdi.RetrofitComponent;
+import cl.nelsonmc.indicadores.domain.repository.retrofitdi.RetrofitModule;
 
 public class BaseApplication extends Application {
     private RetrofitComponent retrofitComponent;

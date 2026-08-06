@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-import cl.nelsonmc.indicadores.model.IndicadorList;
+import cl.nelsonmc.indicadores.domain.model.IndicadorList;
 
 public class SharedPreferencesManager {
     private static SharedPreferencesManager instance;

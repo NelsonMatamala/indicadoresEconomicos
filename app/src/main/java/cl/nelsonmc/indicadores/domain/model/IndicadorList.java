@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.model;
+package cl.nelsonmc.indicadores.domain.model;
 
 import java.io.Serializable;
 

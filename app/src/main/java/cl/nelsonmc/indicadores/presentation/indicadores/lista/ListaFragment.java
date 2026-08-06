@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.indicadores.lista;
+package cl.nelsonmc.indicadores.presentation.indicadores.lista;
 
 import static cl.nelsonmc.indicadores.common.Constants.DATAYPE;
 
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import cl.nelsonmc.indicadores.R;
-import cl.nelsonmc.indicadores.model.IndicadorList;
+import cl.nelsonmc.indicadores.domain.model.IndicadorList;
 
 public class ListaFragment extends Fragment {
 

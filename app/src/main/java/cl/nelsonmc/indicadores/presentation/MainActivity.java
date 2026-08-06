@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores;
+package cl.nelsonmc.indicadores.presentation;
 
 import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
 import static cl.nelsonmc.indicadores.common.Constants.DARKMODE;
@@ -33,8 +33,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.Objects;
 
 
+import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.databinding.ActivityMainBinding;
-import cl.nelsonmc.indicadores.indicadores.IndicadorActivity;
+import cl.nelsonmc.indicadores.presentation.indicadores.IndicadorActivity;
 import cl.nelsonmc.indicadores.common.Utils;
 
 public class MainActivity extends AppCompatActivity {

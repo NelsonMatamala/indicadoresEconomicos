@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.repository;
+package cl.nelsonmc.indicadores.domain.repository;
 
 import static cl.nelsonmc.indicadores.BaseApplication.sharedPreferences;
 import static cl.nelsonmc.indicadores.common.Constants.BITCOIN;
@@ -23,8 +23,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import cl.nelsonmc.indicadores.model.DataIndicador;
-import cl.nelsonmc.indicadores.model.IndicadorList;
+import cl.nelsonmc.indicadores.domain.model.DataIndicador;
+import cl.nelsonmc.indicadores.domain.model.IndicadorList;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

@@ -1,4 +1,4 @@
-package cl.nelsonmc.indicadores.indicadores;
+package cl.nelsonmc.indicadores.presentation.indicadores;
 
 import android.content.Context;
 import android.widget.TextView;
