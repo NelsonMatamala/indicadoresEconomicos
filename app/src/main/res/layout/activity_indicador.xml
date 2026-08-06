@@ -8,12 +8,12 @@
     tools:viewBindingIgnore="true"
     tools:context=".presentation.indicadores.IndicadorActivity">
 
-    <androidx.appcompat.widget.Toolbar
+<androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="@drawable/gradient_toolbar"
+        android:background="@color/colorPrimaryDark"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:titleTextAppearance="@style/coll_toolbar_title"
         app:titleTextColor="@color/colorWhite"
