@@ -36,12 +36,18 @@ import java.util.Objects;
 import cl.nelsonmc.indicadores.R;
 import cl.nelsonmc.indicadores.databinding.ActivityMainBinding;
 import cl.nelsonmc.indicadores.presentation.indicadores.IndicadorActivity;
+import cl.nelsonmc.indicadores.common.BaseActivity;
 import cl.nelsonmc.indicadores.common.Utils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private MainActivityModelView viewModel;
     private BottomSheetDialog bottomSheetDialog;
     private ActivityMainBinding binding;
+
+    @Override
+    protected boolean useDarkStatusBarIcons() {
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

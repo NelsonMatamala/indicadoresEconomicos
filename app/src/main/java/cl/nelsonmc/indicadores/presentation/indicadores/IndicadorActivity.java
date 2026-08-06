@@ -26,12 +26,13 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import cl.nelsonmc.indicadores.R;
+import cl.nelsonmc.indicadores.common.BaseActivity;
 import cl.nelsonmc.indicadores.common.Utils;
 import cl.nelsonmc.indicadores.presentation.indicadores.calculadora.CalcularFragment;
 import cl.nelsonmc.indicadores.presentation.indicadores.lista.ListaFragment;
 import cl.nelsonmc.indicadores.domain.model.IndicadorList;
 
-public class IndicadorActivity extends AppCompatActivity {
+public class IndicadorActivity extends BaseActivity {
 
     private ArrayList<IndicadorList> indicadorList;
     private final ArrayList<String> dateList = new ArrayList<>();
